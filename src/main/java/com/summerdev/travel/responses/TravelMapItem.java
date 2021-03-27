@@ -53,4 +53,8 @@ public class TravelMapItem {
     public int hashCode() {
         return Objects.hash(getNameCity(), getPrice(), getDateFormat());
     }
+
+    public static void main(String[] args) {
+        System.out.println("hello");
+    }
 }

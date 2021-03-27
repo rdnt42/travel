@@ -3,10 +3,11 @@ package com.summerdev.travel.controllers;
 import com.summerdev.travel.domain.TravelMapDomain;
 import com.summerdev.travel.requests.TravelMapRequest;
 import com.summerdev.travel.responses.TravelMapResponse;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/api/v1")
+@Controller
+@RequestMapping("/api")
 public class TravelController {
 
     private TravelMapDomain travelMapDomain;
@@ -15,8 +16,14 @@ public class TravelController {
         this.travelMapDomain = travelMapDomain;
     }
 
-    @PostMapping("/travel_map")
-    public TravelMapResponse getTravelMap(TravelMapRequest request) {
+    @GetMapping("/v1/test")
+    @ResponseBody
+    public String getTest() {
+        return "test";
+    }
+    @PostMapping("/v1/travel_map")
+    @ResponseBody
+    public TravelMapResponse getTravelMap(@RequestBody TravelMapRequest request) {
         return travelMapDomain.getTravelMap(request);
     }
 }
