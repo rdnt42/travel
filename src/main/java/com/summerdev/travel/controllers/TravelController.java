@@ -1,6 +1,6 @@
 package com.summerdev.travel.controllers;
 
-import com.summerdev.travel.domain.TravelMapDomain;
+import com.summerdev.travel.service.TravelMapService;
 import com.summerdev.travel.requests.TravelMapRequest;
 import com.summerdev.travel.responses.TravelMapResponse;
 import org.springframework.stereotype.Controller;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class TravelController {
 
-    private TravelMapDomain travelMapDomain;
+    private TravelMapService travelMapDomain;
 
-    public TravelController(TravelMapDomain travelMapDomain) {
+    public TravelController(TravelMapService travelMapDomain) {
         this.travelMapDomain = travelMapDomain;
     }
 
