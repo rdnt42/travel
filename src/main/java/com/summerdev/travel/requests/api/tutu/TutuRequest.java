@@ -9,7 +9,13 @@ public class TutuRequest {
     @JsonProperty("term2")
     private int arrivalStation;
 
-    private String callback;
+    public TutuRequest() {
+    }
+
+    public TutuRequest(int departureStation, int arrivalStation) {
+        this.departureStation = departureStation;
+        this.arrivalStation = arrivalStation;
+    }
 
     public int getDepartureStation() {
         return departureStation;
@@ -27,11 +33,4 @@ public class TutuRequest {
         this.arrivalStation = arrivalStation;
     }
 
-    public String getCallback() {
-        return callback;
-    }
-
-    public void setCallback(String callback) {
-        this.callback = callback;
-    }
 }

@@ -3,7 +3,7 @@ package com.summerdev.travel.responses.api.tutu;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TutuTripResponse {
+public class TutuTrainsResponse {
     List<TutuTripItemResponse> trips = new ArrayList<>();
 
     public List<TutuTripItemResponse> getTrips() {
