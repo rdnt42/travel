@@ -16,7 +16,7 @@ public class TutuTripItemResponse {
     private String arrivalTime;
     private String trainNumber;
     private String travelTimeInSeconds;
-    private List<TutuRailwayCarriage> categories = new ArrayList<>();
+    private List<TutuRailwayCarriageResponse> categories = new ArrayList<>();
 
 
     public String getName() {
@@ -91,11 +91,11 @@ public class TutuTripItemResponse {
         this.travelTimeInSeconds = travelTimeInSeconds;
     }
 
-    public List<TutuRailwayCarriage> getCategories() {
+    public List<TutuRailwayCarriageResponse> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<TutuRailwayCarriage> categories) {
+    public void setCategories(List<TutuRailwayCarriageResponse> categories) {
         this.categories = categories;
     }
 }

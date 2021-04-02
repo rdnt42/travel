@@ -1,6 +1,6 @@
 package com.summerdev.travel.controllers;
 
-import com.summerdev.travel.service.TravelMapService;
+import com.summerdev.travel.services.TravelMapService;
 import com.summerdev.travel.requests.TravelMapRequest;
 import com.summerdev.travel.responses.TravelMapResponse;
 import org.springframework.stereotype.Controller;
