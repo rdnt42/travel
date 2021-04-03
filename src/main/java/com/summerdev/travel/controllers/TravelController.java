@@ -27,9 +27,4 @@ public class TravelController {
         return travelMapDomain.getTravelMap(request);
     }
 
-//    @PostMapping("/v1/travel_map")
-//    @ResponseBody
-//    public TravelMapResponse getTravelMap(@RequestBody TravelMapRequest request) {
-//        return travelMapDomain.getTravelMap(request);
-//    }
 }
