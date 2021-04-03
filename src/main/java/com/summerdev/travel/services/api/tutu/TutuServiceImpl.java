@@ -9,7 +9,6 @@ import com.summerdev.travel.requests.TravelMapRequest;
 import com.summerdev.travel.requests.api.tutu.TutuRequest;
 import com.summerdev.travel.responses.api.tutu.TutuTrainsResponse;
 import com.summerdev.travel.services.api.ApiService;
-import com.summerdev.travel.services.api.LoggerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TutuServiceImpl implements TutuService, ApiService<TutuTrainsResponse>, LoggerHelper {
+public class TutuServiceImpl implements TutuService, ApiService<TutuTrainsResponse> {
 
     private static final Logger log = LoggerFactory.getLogger(TutuServiceImpl.class);
 
@@ -70,13 +69,11 @@ public class TutuServiceImpl implements TutuService, ApiService<TutuTrainsRespon
 
         try {
             ResponseEntity<TutuTrainsResponse> response = get(builder, TutuTrainsResponse.class);
-            log.info("{}. Request status is {}",
-                    getMethodInfo(StackWalker.getInstance()), response.getStatusCode());
+            log.info("Get request status is {}", response.getStatusCode());
 
             return response.getBody();
         } catch (RestClientException e) {
-            log.error("{}. Request failed, depart id: {}, arrival id: {}, error: {}",
-                    getMethodInfo(StackWalker.getInstance()),
+            log.error("Get request failed, depart id: {}, arrival id: {}, error: {}",
                     request.getDepartureStation(), request.getArrivalStation(), e.getMessage());
         }
 
