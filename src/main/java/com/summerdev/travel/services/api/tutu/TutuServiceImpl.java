@@ -1,6 +1,6 @@
 package com.summerdev.travel.services.api.tutu;
 
-import com.summerdev.travel.constants.api.TutuUrls;
+import com.summerdev.travel.constants.api.Urls;
 import com.summerdev.travel.entities.TutuRoute;
 import com.summerdev.travel.entities.TutuStation;
 import com.summerdev.travel.repositories.TutuRouteRepository;
@@ -8,21 +8,20 @@ import com.summerdev.travel.repositories.TutuStationRepository;
 import com.summerdev.travel.requests.TravelMapRequest;
 import com.summerdev.travel.requests.api.tutu.TutuRequest;
 import com.summerdev.travel.responses.api.tutu.TutuTrainsResponse;
+import com.summerdev.travel.services.api.ApiService;
+import com.summerdev.travel.services.api.LoggerHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
-public class TutuServiceImpl implements TutuService {
+public class TutuServiceImpl implements TutuService, ApiService<TutuTrainsResponse>, LoggerHelper {
 
     private static final Logger log = LoggerFactory.getLogger(TutuServiceImpl.class);
 
@@ -65,26 +64,22 @@ public class TutuServiceImpl implements TutuService {
 
     @Override
     public TutuTrainsResponse get(TutuRequest request) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        HttpEntity<String> entity = new HttpEntity<>("body", headers);
-
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(TutuUrls.URL_TUTU_GET_TRAINS)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(Urls.URL_TUTU_GET_TRAINS)
                 .queryParam("term", request.getDepartureStation())
                 .queryParam("term2", request.getArrivalStation());
+
         try {
-            ResponseEntity<TutuTrainsResponse> response = restTemplate.exchange(
-                    builder.toUriString(), HttpMethod.GET, entity, TutuTrainsResponse.class);
-            log.info("API: tutu; method: get; mess: request status is {}", response.getStatusCode());
+            ResponseEntity<TutuTrainsResponse> response = get(builder, TutuTrainsResponse.class);
+            log.info("{}. Request status is {}",
+                    getMethodInfo(StackWalker.getInstance()), response.getStatusCode());
 
             return response.getBody();
         } catch (RestClientException e) {
-            log.error("API: tutu; method: get; mess: request failed, depart id: {}, arrival id: {}",
+            log.error("{}. Request failed, depart id: {}, arrival id: {}, error: {}",
+                    getMethodInfo(StackWalker.getInstance()),
                     request.getDepartureStation(), request.getArrivalStation(), e.getMessage());
-            return null;
         }
+
+        return null;
     }
 }
