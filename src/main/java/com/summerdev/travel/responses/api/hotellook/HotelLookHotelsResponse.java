@@ -1,70 +1,25 @@
 package com.summerdev.travel.responses.api.hotellook;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+import java.util.ArrayList;
+import java.util.List;
+
 public class HotelLookHotelsResponse {
-    private HotelLookLocationResponse location;
-    private Double priceAvg;
-    private HotelLookPricesResponse pricePercentile;
-    private String hotelName;
-    private Long stars;
-    private Long hotelId;
-    private Double priceFrom;
+    List<HotelLookHotelResponse> hotels = new ArrayList<>();
 
-    public HotelLookLocationResponse getLocation() {
-        return location;
+    public HotelLookHotelsResponse() {
     }
 
-    public void setLocation(HotelLookLocationResponse location) {
-        this.location = location;
+    public HotelLookHotelsResponse(List<HotelLookHotelResponse> hotels) {
+        this.hotels = hotels;
     }
 
-    public Double getPriceAvg() {
-        return priceAvg;
+    public List<HotelLookHotelResponse> getHotels() {
+        return hotels;
     }
 
-    public void setPriceAvg(Double priceAvg) {
-        this.priceAvg = priceAvg;
-    }
-
-    public String getHotelName() {
-        return hotelName;
-    }
-
-    public void setHotelName(String hotelName) {
-        this.hotelName = hotelName;
-    }
-
-    public Long getStars() {
-        return stars;
-    }
-
-    public void setStars(Long stars) {
-        this.stars = stars;
-    }
-
-    public Long getHotelId() {
-        return hotelId;
-    }
-
-    public void setHotelId(Long hotelId) {
-        this.hotelId = hotelId;
-    }
-
-    public Double getPriceFrom() {
-        return priceFrom;
-    }
-
-    public void setPriceFrom(Double priceFrom) {
-        this.priceFrom = priceFrom;
-    }
-
-    public HotelLookPricesResponse getPricePercentile() {
-        return pricePercentile;
-    }
-
-    public void setPricePercentile(HotelLookPricesResponse pricePercentile) {
-        this.pricePercentile = pricePercentile;
+    public void setHotels(List<HotelLookHotelResponse> hotels) {
+        this.hotels = hotels;
     }
 }

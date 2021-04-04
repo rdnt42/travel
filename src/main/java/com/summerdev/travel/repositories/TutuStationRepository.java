@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TutuStationRepository extends JpaRepository<TutuStation, Long> {
-    List<TutuStation> findByStationName(String name);
+    List<TutuStation> findByStationNameStartsWith(String name);
+
 }

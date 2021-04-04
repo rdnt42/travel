@@ -17,6 +17,8 @@ public class TutuRoute implements Serializable {
     @JoinColumn(name = "arrival_station_id")
     private TutuStation arrivalStation;
 
+    private Long popularity;
+
     public Long getId() {
         return id;
     }
@@ -41,4 +43,11 @@ public class TutuRoute implements Serializable {
         this.arrivalStation = arrivalStation;
     }
 
+    public Long getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Long popularity) {
+        this.popularity = popularity;
+    }
 }

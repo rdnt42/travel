@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface TutuRouteRepository extends JpaRepository<TutuRoute, Long> {
     List<TutuRoute> findByDepartureStation(TutuStation departureStation);
+    List<TutuRoute> findByDepartureStationAndPopularityGreaterThanEqual(TutuStation departureStation, Long rating);
+
 }

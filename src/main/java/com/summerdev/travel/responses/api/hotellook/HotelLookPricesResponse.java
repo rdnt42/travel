@@ -12,4 +12,27 @@ public class HotelLookPricesResponse {
     @JsonProperty("99")
     private Double highPrice;
 
+    public Double getSmallPrice() {
+        return smallPrice;
+    }
+
+    public void setSmallPrice(Double smallPrice) {
+        this.smallPrice = smallPrice;
+    }
+
+    public Double getMediumPrice() {
+        return mediumPrice;
+    }
+
+    public void setMediumPrice(Double mediumPrice) {
+        this.mediumPrice = mediumPrice;
+    }
+
+    public Double getHighPrice() {
+        return highPrice;
+    }
+
+    public void setHighPrice(Double highPrice) {
+        this.highPrice = highPrice;
+    }
 }

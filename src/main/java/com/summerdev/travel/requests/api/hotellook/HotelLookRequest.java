@@ -1,8 +1,10 @@
 package com.summerdev.travel.requests.api.hotellook;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HotelLookRequest {
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private String location;
     private Date checkIn;
     private Date getCheckOut;
@@ -16,6 +18,15 @@ public class HotelLookRequest {
     private int hotelId;
     private int children;
     private String token;
+
+    public HotelLookRequest() {
+    }
+
+    public HotelLookRequest(String location, Date checkIn, Date getCheckOut) {
+        this.location = location;
+        this.checkIn = checkIn;
+        this.getCheckOut = getCheckOut;
+    }
 
     public String getLocation() {
         return location;
@@ -103,5 +114,13 @@ public class HotelLookRequest {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getCheckInFormated() {
+        return simpleDateFormat.format(checkIn);
+    }
+
+    public String getCheckOutFormated() {
+        return simpleDateFormat.format(getCheckOut);
     }
 }

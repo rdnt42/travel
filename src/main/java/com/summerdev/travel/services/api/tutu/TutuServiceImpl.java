@@ -39,10 +39,10 @@ public class TutuServiceImpl implements TutuService, ApiService<TutuTrainsRespon
         if (request.getDepartureCity() == null) {
             throw new NullPointerException("Departure city cannot be null");
         }
-        List<TutuStation> stations = tutuStationRepository.findByStationName(request.getDepartureCity());
+        List<TutuStation> stations = tutuStationRepository.findByStationNameStartsWith(request.getDepartureCity());
 
         for (TutuStation station : stations) {
-            List<TutuRoute> routes = tutuRouteRepository.findByDepartureStation(station);
+            List<TutuRoute> routes = tutuRouteRepository.findByDepartureStationAndPopularityGreaterThanEqual(station, 10L);
 
             for (TutuRoute route : routes) {
                 int departId = route.getDepartureStation().getStationId().intValue();
@@ -68,7 +68,7 @@ public class TutuServiceImpl implements TutuService, ApiService<TutuTrainsRespon
                 .queryParam("term2", request.getArrivalStation());
 
         try {
-            ResponseEntity<TutuTrainsResponse> response = get(builder, TutuTrainsResponse.class);
+            ResponseEntity<TutuTrainsResponse> response = getRequest(builder, TutuTrainsResponse.class);
             log.info("Get request status is {}", response.getStatusCode());
 
             return response.getBody();
