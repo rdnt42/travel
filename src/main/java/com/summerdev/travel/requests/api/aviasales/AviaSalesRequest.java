@@ -1,8 +1,7 @@
-package com.summerdev.travel.requests.api.tutu;
+package com.summerdev.travel.requests.api.aviasales;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.Objects;
 
