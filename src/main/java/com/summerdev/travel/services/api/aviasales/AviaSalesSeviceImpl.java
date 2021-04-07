@@ -7,11 +7,14 @@ import com.summerdev.travel.services.api.ApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
+@Service
 public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSalesMainResponse> {
     private static final Logger log = LoggerFactory.getLogger(AviaSalesSeviceImpl.class);
 
@@ -21,6 +24,10 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
     @Override
     public AviaSalesMainResponse get(AviaSalesRequest request) {
 
+        request.setArrivalStation("MOW");
+        request.setDepartureStation("HKT");
+        request.setDepart_date(new Date(2021-11));
+        request.setReturn_date(new Date(2021-12));
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromHttpUrl(Urls.URL_AVIASALES_GET_CHEAP_TICKETS)
                 .queryParam("departureStation", request.getArrivalStation())
