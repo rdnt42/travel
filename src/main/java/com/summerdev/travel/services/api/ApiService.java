@@ -21,7 +21,8 @@ public interface ApiService<R> {
         return restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, c);
     }
 
-    default ResponseEntity<List<R>> getResponse(UriComponentsBuilder builder, ParameterizedTypeReference ref) {
+    default ResponseEntity<List<R>> getResponse(UriComponentsBuilder builder,
+                                                ParameterizedTypeReference<List<R>> ref) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
