@@ -16,7 +16,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
@@ -50,7 +49,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
         try {
 
             ParameterizedTypeReference ref = new ParameterizedTypeReference<List<HotelLookHotelResponse>>() {};
-            ResponseEntity<List<HotelLookHotelResponse>> responseEntity = getRequest(builder, ref);
+            ResponseEntity<List<HotelLookHotelResponse>> responseEntity = getResponse(builder, ref);
 
             log.info("Get request status is {}", responseEntity.getStatusCode());
 

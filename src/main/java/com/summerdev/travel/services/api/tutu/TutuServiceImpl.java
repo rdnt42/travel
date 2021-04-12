@@ -68,7 +68,7 @@ public class TutuServiceImpl implements TutuService, ApiService<TutuTrainsRespon
                 .queryParam("term2", request.getArrivalStation());
 
         try {
-            ResponseEntity<TutuTrainsResponse> response = getRequest(builder, TutuTrainsResponse.class);
+            ResponseEntity<TutuTrainsResponse> response = getResponse(builder, TutuTrainsResponse.class);
             log.info("Get request status is {}", response.getStatusCode());
 
             return response.getBody();

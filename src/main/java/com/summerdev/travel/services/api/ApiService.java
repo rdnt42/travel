@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public interface ApiService<R> {
-    default ResponseEntity<R> getRequest(UriComponentsBuilder builder, Class<R> c) {
+    default ResponseEntity<R> getResponse(UriComponentsBuilder builder, Class<R> c) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -21,7 +21,7 @@ public interface ApiService<R> {
         return restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, c);
     }
 
-    default ResponseEntity<List<R>> getRequest(UriComponentsBuilder builder, ParameterizedTypeReference ref) {
+    default ResponseEntity<List<R>> getResponse(UriComponentsBuilder builder, ParameterizedTypeReference ref) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
