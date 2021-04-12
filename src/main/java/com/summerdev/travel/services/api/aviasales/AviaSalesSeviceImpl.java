@@ -12,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -26,20 +27,22 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
 
         request.setArrivalStation("MOW");
         request.setDepartureStation("HKT");
-        request.setDepart_date(new Date(2021-11));
-        request.setReturn_date(new Date(2021-12));
+        request.setDepartDate(new Date(2021-11));
+        request.setReturnDate(new Date(2021-12));
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromHttpUrl(Urls.URL_AVIASALES_GET_CHEAP_TICKETS)
-                .queryParam("departureStation", request.getArrivalStation())
-                .queryParam("arrivalStation", request.getDepartureStation())
-                .queryParam("depart_date", request.getDepart_date())
-                .queryParam("return_date", request.getReturn_date())
+                .queryParam("origin", request.getArrivalStation())
+                .queryParam("destination", request.getDepartureStation())
+                .queryParam("depart_date", convertToSimpleDateFormat(request.getDepartDate()))
+                .queryParam("return_date", convertToSimpleDateFormat(request.getReturnDate()))
+                .queryParam("token", "ccc384ba73ce919b05d73126ac03cb48")
                 .encode(StandardCharsets.US_ASCII);
         log.info("builder: {}", builder.toUriString());
 
         try {
 
-            ResponseEntity responseEntity = getRequest(builder, AviaSalesMainResponse.class);
+            //ResponseEntity responseEntity = getRequest(builder, AviaSalesMainResponse.class);
+            ResponseEntity<AviaSalesMainResponse> responseEntity = getRequest(builder, AviaSalesMainResponse.class);
 
             log.info("Get request status is {}", responseEntity.getStatusCode());
 
@@ -49,6 +52,13 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
         }
 
         return null;
+    }
+
+    private String convertToSimpleDateFormat(Date date)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String format = formatter.format(date);
+        return format;
     }
 }
 

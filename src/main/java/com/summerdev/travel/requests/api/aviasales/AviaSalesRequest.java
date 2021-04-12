@@ -14,25 +14,25 @@ public class AviaSalesRequest {
     private String arrivalStation;
 
     @JsonProperty("depart_date")
-    private Date depart_date;
+    private Date departDate;
 
     @JsonProperty("return_date")
-    private Date return_date;
+    private Date returnDate;
 
     public AviaSalesRequest() {
     }
 
-    public AviaSalesRequest(String departureStation, String arrivalStation, Date depart_date) {
+    public AviaSalesRequest(String departureStation, String arrivalStation, Date departDate) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
-        this.depart_date = depart_date;
+        this.departDate = departDate;
     }
 
-    public AviaSalesRequest(String departureStation, String arrivalStation, Date depart_date, Date return_date) {
+    public AviaSalesRequest(String departureStation, String arrivalStation, Date departDate, Date returnDate) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
-        this.depart_date = depart_date;
-        this.return_date = return_date;
+        this.departDate = departDate;
+        this.returnDate = returnDate;
     }
 
     public String getDepartureStation() {
@@ -51,20 +51,20 @@ public class AviaSalesRequest {
         this.arrivalStation = arrivalStation;
     }
 
-    public Date getDepart_date() {
-        return depart_date;
+    public Date getDepartDate() {
+        return departDate;
     }
 
-    public void setDepart_date(Date depart_date) {
-        this.depart_date = depart_date;
+    public void setDepartDate(Date departDate) {
+        this.departDate = departDate;
     }
 
-    public Date getReturn_date() {
-        return return_date;
+    public Date getReturnDate() {
+        return returnDate;
     }
 
-    public void setReturn_date(Date return_date) {
-        this.return_date = return_date;
+    public void setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
     }
 
     @Override
@@ -72,12 +72,12 @@ public class AviaSalesRequest {
         if (this == o) return true;
         if (!(o instanceof AviaSalesRequest)) return false;
         AviaSalesRequest that = (AviaSalesRequest) o;
-        return Objects.equals(departureStation, that.departureStation) && Objects.equals(arrivalStation, that.arrivalStation) && Objects.equals(depart_date, that.depart_date) && Objects.equals(return_date, that.return_date);
+        return Objects.equals(departureStation, that.departureStation) && Objects.equals(arrivalStation, that.arrivalStation) && Objects.equals(departDate, that.departDate) && Objects.equals(returnDate, that.returnDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departureStation, arrivalStation, depart_date, return_date);
+        return Objects.hash(departureStation, arrivalStation, departDate, returnDate);
     }
 
     @Override
@@ -85,8 +85,8 @@ public class AviaSalesRequest {
         return "AviaSalesRequest{" +
                 "departureStation='" + departureStation + '\'' +
                 ", arrivalStation='" + arrivalStation + '\'' +
-                ", depart_date=" + depart_date +
-                ", return_date=" + return_date +
+                ", depart_date=" + departDate +
+                ", return_date=" + returnDate +
                 '}';
     }
 }
