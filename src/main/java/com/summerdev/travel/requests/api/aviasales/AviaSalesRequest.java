@@ -14,21 +14,21 @@ public class AviaSalesRequest {
     private String arrivalStation;
 
     @JsonProperty("depart_date")
-    private Date departDate;
+    private String departDate;
 
     @JsonProperty("return_date")
-    private Date returnDate;
+    private String returnDate;
 
     public AviaSalesRequest() {
     }
 
-    public AviaSalesRequest(String departureStation, String arrivalStation, Date departDate) {
+    public AviaSalesRequest(String departureStation, String arrivalStation, String departDate) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.departDate = departDate;
     }
 
-    public AviaSalesRequest(String departureStation, String arrivalStation, Date departDate, Date returnDate) {
+    public AviaSalesRequest(String departureStation, String arrivalStation, String departDate, String returnDate) {
         this.departureStation = departureStation;
         this.arrivalStation = arrivalStation;
         this.departDate = departDate;
@@ -51,19 +51,19 @@ public class AviaSalesRequest {
         this.arrivalStation = arrivalStation;
     }
 
-    public Date getDepartDate() {
+    public String getDepartDate() {
         return departDate;
     }
 
-    public void setDepartDate(Date departDate) {
+    public void setDepartDate(String departDate) {
         this.departDate = departDate;
     }
 
-    public Date getReturnDate() {
+    public String getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Date returnDate) {
+    public void setReturnDate(String returnDate) {
         this.returnDate = returnDate;
     }
 

@@ -13,6 +13,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Date;
 
 @Service
@@ -27,15 +29,18 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
 
         request.setArrivalStation("MOW");
         request.setDepartureStation("HKT");
-        request.setDepartDate(new Date(2021-11));
-        request.setReturnDate(new Date(2021-12));
+//        depart_date (optional)	-	Day or month of departure (yyyy-mm-dd or yyyy-mm).
+//        return_date (optional)	-	Day or month of return (yyyy-mm-dd or yyyy-mm).
+
+        request.setDepartDate("2021-05-11");
+        request.setReturnDate("2021-05-24");
         UriComponentsBuilder builder = UriComponentsBuilder
                 .fromHttpUrl(Urls.URL_AVIASALES_GET_CHEAP_TICKETS)
                 .queryParam("origin", request.getArrivalStation())
                 .queryParam("destination", request.getDepartureStation())
-                .queryParam("depart_date", convertToSimpleDateFormat(request.getDepartDate()))
-                .queryParam("return_date", convertToSimpleDateFormat(request.getReturnDate()))
-                .queryParam("token", "ccc384ba73ce919b05d73126ac03cb48")
+                .queryParam("depart_date", request.getDepartDate())
+                .queryParam("return_date", request.getReturnDate())
+                .queryParam("token", System.getenv("ENV_AVIASALES_TOKEN"))
                 .encode(StandardCharsets.US_ASCII);
         log.info("builder: {}", builder.toUriString());
 
@@ -46,7 +51,7 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
 
             log.info("Get request status is {}", responseEntity.getStatusCode());
 
-            return new AviaSalesMainResponse(responseEntity.getBody());
+            return responseEntity.getBody();
         } catch (RestClientException e) {
             log.error("Get request failed, error: {}", e.getMessage());
         }
@@ -54,12 +59,11 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
         return null;
     }
 
-    private String convertToSimpleDateFormat(Date date)
-    {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String format = formatter.format(date);
-        return format;
-    }
+//    private String convertToSimpleDateFormat(Date date)
+//    {
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//        return formatter.format(date);
+//    }
 }
 
 //{

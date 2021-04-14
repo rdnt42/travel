@@ -1,33 +1,40 @@
 package com.summerdev.travel.responses.api.aviasales;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AviaSalesMainResponse {
 
-    private boolean result;
+    private boolean success;
+
+    @JsonProperty("data")
     private AviaSalesDataResponse aviaSalesDataResponse;
-    private String errorFromResponse;
+    private String error;
     private String currency;
 
-    public AviaSalesMainResponse(boolean result, AviaSalesDataResponse aviaSalesDataResponse, String errorFromResponse, String currency) {
-        this.result = result;
+    public AviaSalesMainResponse(boolean result, AviaSalesDataResponse aviaSalesDataResponse, String error, String currency) {
+        this.success = result;
         this.aviaSalesDataResponse = aviaSalesDataResponse;
-        this.errorFromResponse = errorFromResponse;
+        this.error = error;
         this.currency = currency;
     }
 
-    public AviaSalesMainResponse(Object body) {
+    public AviaSalesMainResponse() {
     }
 
-    public boolean isResult() {
-        return result;
+//    public AviaSalesMainResponse(AviaSalesMainResponse aviaSalesMainResponse) {
+//
+//    }
+
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setResult(boolean result) {
-        this.result = result;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public AviaSalesDataResponse getAviaSalesDataResponse() {
@@ -38,12 +45,12 @@ public class AviaSalesMainResponse {
         this.aviaSalesDataResponse = aviaSalesDataResponse;
     }
 
-    public String getErrorFromResponse() {
-        return errorFromResponse;
+    public String getError() {
+        return error;
     }
 
-    public void setErrorFromResponse(String errorFromResponse) {
-        this.errorFromResponse = errorFromResponse;
+    public void setError(String error) {
+        this.error = error;
     }
 
     public String getCurrency() {
@@ -59,20 +66,20 @@ public class AviaSalesMainResponse {
         if (this == o) return true;
         if (!(o instanceof AviaSalesMainResponse)) return false;
         AviaSalesMainResponse that = (AviaSalesMainResponse) o;
-        return result == that.result && Objects.equals(aviaSalesDataResponse, that.aviaSalesDataResponse) && Objects.equals(errorFromResponse, that.errorFromResponse) && Objects.equals(currency, that.currency);
+        return success == that.success && Objects.equals(aviaSalesDataResponse, that.aviaSalesDataResponse) && Objects.equals(error, that.error) && Objects.equals(currency, that.currency);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(result, aviaSalesDataResponse, errorFromResponse, currency);
+        return Objects.hash(success, aviaSalesDataResponse, error, currency);
     }
 
     @Override
     public String toString() {
         return "AviaSalesMainResponse{" +
-                "result=" + result +
+                "result=" + success +
                 ", aviaSalesDataResponse=" + aviaSalesDataResponse +
-                ", errorFromResponse='" + errorFromResponse + '\'' +
+                ", errorFromResponse='" + error + '\'' +
                 ", currency='" + currency + '\'' +
                 '}';
     }
