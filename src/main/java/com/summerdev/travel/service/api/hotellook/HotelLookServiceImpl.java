@@ -49,7 +49,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
         try {
 
             ParameterizedTypeReference ref = new ParameterizedTypeReference<List<HotelLookHotelResponse>>() {};
-            ResponseEntity<List<HotelLookHotelResponse>> responseEntity = getResponse(builder, ref);
+            ResponseEntity<List<HotelLookHotelResponse>> responseEntity = getResponseByRest(builder, ref);
 
             log.info("Get request status is {}", responseEntity.getStatusCode());
 
@@ -88,7 +88,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
 
         List<TutuStation> stations = tutuStationRepository.findByStationNameStartsWith(request.getDepartureCity());
         for (TutuStation station : stations) {
-            List<TutuRoute> routes = tutuRouteRepository.findByDepartureStationAndPopularityGreaterThanEqual(station, 10L);
+            List<TutuRoute> routes = tutuRouteRepository.findByDepartureStation(station);
 
             for (TutuRoute route : routes) {
                 arrivalStations.add(route.getArrivalStation());

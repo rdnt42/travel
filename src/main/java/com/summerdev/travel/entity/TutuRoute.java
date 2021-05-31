@@ -6,24 +6,22 @@ import java.io.Serializable;
 @Entity
 @Table(name = "tutu_routes")
 public class TutuRoute implements Serializable {
-    @Id
-    private Long id;
+    @EmbeddedId
+    private TutuRoutePk id;
 
     @ManyToOne
-    @JoinColumn(name = "departure_station_id")
+    @JoinColumn(name = "departure_station_id", insertable = false, updatable = false)
     private TutuStation departureStation;
 
     @ManyToOne
-    @JoinColumn(name = "arrival_station_id")
+    @JoinColumn(name = "arrival_station_id", insertable = false, updatable = false)
     private TutuStation arrivalStation;
 
-    private Long popularity;
-
-    public Long getId() {
+    public TutuRoutePk getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(TutuRoutePk id) {
         this.id = id;
     }
 
@@ -43,11 +41,4 @@ public class TutuRoute implements Serializable {
         this.arrivalStation = arrivalStation;
     }
 
-    public Long getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(Long popularity) {
-        this.popularity = popularity;
-    }
 }

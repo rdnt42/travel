@@ -1,6 +1,7 @@
 package com.summerdev.travel.response.api.tutu;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +9,22 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TutuTripItemResponse {
     private String name;
-    private String departureStation;
-    private String arrivalStation;
+
+    @JsonDeserialize(as = Long.class)
+    private Long departureStation;
+
+    @JsonDeserialize(as = Long.class)
+    private Long arrivalStation;
+
     private String runDepartureStation;
     private String runArrivalStation;
     private String departureTime;
     private String arrivalTime;
     private String trainNumber;
-    private String travelTimeInSeconds;
-    private List<TutuRailwayCarriageResponse> categories = new ArrayList<>();
 
+    @JsonDeserialize(as = Long.class)
+    private Long travelTimeInSeconds;
+    private List<TutuRailwayCarriageResponse> categories = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -27,19 +34,19 @@ public class TutuTripItemResponse {
         this.name = name;
     }
 
-    public String getDepartureStation() {
+    public Long getDepartureStation() {
         return departureStation;
     }
 
-    public void setDepartureStation(String departureStation) {
+    public void setDepartureStation(Long departureStation) {
         this.departureStation = departureStation;
     }
 
-    public String getArrivalStation() {
+    public Long getArrivalStation() {
         return arrivalStation;
     }
 
-    public void setArrivalStation(String arrivalStation) {
+    public void setArrivalStation(Long arrivalStation) {
         this.arrivalStation = arrivalStation;
     }
 
@@ -83,11 +90,11 @@ public class TutuTripItemResponse {
         this.trainNumber = trainNumber;
     }
 
-    public String getTravelTimeInSeconds() {
+    public Long getTravelTimeInSeconds() {
         return travelTimeInSeconds;
     }
 
-    public void setTravelTimeInSeconds(String travelTimeInSeconds) {
+    public void setTravelTimeInSeconds(Long travelTimeInSeconds) {
         this.travelTimeInSeconds = travelTimeInSeconds;
     }
 

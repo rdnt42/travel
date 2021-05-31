@@ -3,6 +3,8 @@ package com.summerdev.travel.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,7 +13,8 @@ import javax.persistence.Id;
  * Time: 23:26
  */
 @Entity
-public class GeoName {
+@Table(name = "geo_names")
+public class GeoName implements Serializable {
     @Id
     @Column(name = "geo_name_id")
     private Long id;
