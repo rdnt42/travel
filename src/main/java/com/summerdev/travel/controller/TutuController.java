@@ -1,7 +1,7 @@
 package com.summerdev.travel.controller;
 
 import com.summerdev.travel.response.api.tutu.TutuTrainsResponse;
-import com.summerdev.travel.service.TutuRouteService;
+import com.summerdev.travel.service.RouteService;
 import com.summerdev.travel.service.api.tutu.TutuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +13,9 @@ import java.util.List;
 public class TutuController {
 
     private final TutuService tutuService;
-    private final TutuRouteService tutuRouteService;
+    private final RouteService tutuRouteService;
 
-    public TutuController(TutuService tutuService, TutuRouteService tutuRouteService) {
+    public TutuController(TutuService tutuService, RouteService tutuRouteService) {
         this.tutuService = tutuService;
         this.tutuRouteService = tutuRouteService;
     }

@@ -1,6 +1,7 @@
 package com.summerdev.travel.service.api.hotellook;
 
 import com.summerdev.travel.constant.api.Urls;
+import com.summerdev.travel.entity.GeoName;
 import com.summerdev.travel.entity.TutuRoute;
 import com.summerdev.travel.entity.TutuStation;
 import com.summerdev.travel.repository.TutuRouteRepository;
@@ -96,5 +97,15 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
         }
 
         return getHotelsInfo(request, arrivalStations);
+    }
+
+    @Override
+    public HotelLookHotelsResponse getHotelsInfo(GeoName city) {
+        Date outDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(outDate);
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+
+        return get(new HotelLookRequest(city.getGeoNameRu(), new Date(), calendar.getTime()));
     }
 }

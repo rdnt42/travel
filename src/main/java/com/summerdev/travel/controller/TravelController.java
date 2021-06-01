@@ -16,9 +16,10 @@ public class TravelController {
     }
 
     @GetMapping("/v1/travel_map")
-    public TravelMapResponse getTravelMap(@RequestParam String departureCity,
-                                          @RequestParam Long maxCost) {
-        return travelMapDomain.getTravelMap(departureCity, maxCost);
+    public TravelMapResponse getTravelMap(@RequestParam String departureCityName,
+                                          @RequestParam Long maxCost,
+                                          @RequestParam Long travelComfortTypeId) {
+        return travelMapDomain.getTravelMap(departureCityName, maxCost, travelComfortTypeId);
     }
 
 }

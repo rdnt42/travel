@@ -1,5 +1,6 @@
 package com.summerdev.travel.service.api.hotellook;
 
+import com.summerdev.travel.entity.GeoName;
 import com.summerdev.travel.entity.TutuStation;
 import com.summerdev.travel.request.TravelMapRequest;
 import com.summerdev.travel.request.api.hotellook.HotelLookRequest;
@@ -13,4 +14,6 @@ public interface HotelLookService {
     List<HotelLookHotelsResponse> getHotelsInfo(TravelMapRequest request, List<TutuStation> arrivalStations);
 
     List<HotelLookHotelsResponse> getHotelsInfo(TravelMapRequest request);
+
+    HotelLookHotelsResponse getHotelsInfo(GeoName city);
 }

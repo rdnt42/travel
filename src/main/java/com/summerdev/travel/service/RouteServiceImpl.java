@@ -1,6 +1,6 @@
 package com.summerdev.travel.service;
 
-import com.summerdev.travel.entity.TrainIfo;
+import com.summerdev.travel.entity.TrainInfo;
 import com.summerdev.travel.entity.TutuRoute;
 import com.summerdev.travel.entity.TutuStation;
 import com.summerdev.travel.repository.TrainInfoRepository;
@@ -26,16 +26,16 @@ import static com.summerdev.travel.entity.SeatType.*;
  * Time: 18:56
  */
 @Service
-public class TutuRouteServiceImpl implements TutuRouteService {
-    private final Logger logger = LoggerFactory.getLogger(TutuRouteServiceImpl.class);
+public class RouteServiceImpl implements RouteService {
+    private final Logger logger = LoggerFactory.getLogger(RouteServiceImpl.class);
 
     private final TutuRouteRepository tutuRouteRepository;
     private final TutuService tutuService;
     private final TutuStationRepository tutuStationRepository;
     private final TrainInfoRepository trainInfoRepository;
 
-    public TutuRouteServiceImpl(TutuRouteRepository tutuRouteRepository, TutuService tutuService,
-                                TutuStationRepository tutuStationRepository, TrainInfoRepository trainInfoRepository) {
+    public RouteServiceImpl(TutuRouteRepository tutuRouteRepository, TutuService tutuService,
+                            TutuStationRepository tutuStationRepository, TrainInfoRepository trainInfoRepository) {
         this.tutuRouteRepository = tutuRouteRepository;
         this.tutuService = tutuService;
         this.tutuStationRepository = tutuStationRepository;
@@ -44,13 +44,13 @@ public class TutuRouteServiceImpl implements TutuRouteService {
 
     @Override
     public void updateTrainsInfo() {
-        List<TrainIfo> oldData = trainInfoRepository.findAll();
+        List<TrainInfo> oldData = trainInfoRepository.findAll();
         long updatedCount = 0;
 
         List<TutuRoute> routes = tutuRouteRepository.findAll();
         for (TutuRoute route : routes) {
             try {
-                List<TrainIfo> updatedList = updateTrainInfo(route);
+                List<TrainInfo> updatedList = updateTrainInfo(route);
                 updatedCount += updatedList.size();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -62,29 +62,29 @@ public class TutuRouteServiceImpl implements TutuRouteService {
         logger.info("Trains info data updated. Updated count: {}, deleted count: {}", updatedCount, oldData.size());
     }
 
-    private List<TrainIfo> updateTrainInfo(TutuRoute route) {
+    private List<TrainInfo> updateTrainInfo(TutuRoute route) {
         TutuTrainsResponse response = tutuService.getTrainsResponse(route.getDepartureStation(), route.getArrivalStation());
 
         if (response == null) return new ArrayList<>();
 
-        List<TrainIfo> trainIfos = new ArrayList<>();
+        List<TrainInfo> trainInfos = new ArrayList<>();
         for (TutuTripItemResponse trip : response.getTrips()) {
             for (TutuRailwayCarriageResponse category : trip.getCategories()) {
 
-                TrainIfo trainIfo = getTrainInfo(trip, category);
+                TrainInfo trainIfo = getTrainInfo(trip, category);
                 if (trainIfo != null) {
-                    trainIfos.add(trainIfo);
+                    trainInfos.add(trainIfo);
                 }
             }
         }
 
-        if (trainIfos.isEmpty()) return new ArrayList<>();
+        if (trainInfos.isEmpty()) return new ArrayList<>();
 
-        Map<Long, Optional<TrainIfo>> minCostTrains = trainIfos.stream()
-                .collect(Collectors.groupingBy(TrainIfo::getSeatTypeId,
-                        Collectors.minBy(Comparator.comparing(TrainIfo::getCost))));
+        Map<Long, Optional<TrainInfo>> minCostTrains = trainInfos.stream()
+                .collect(Collectors.groupingBy(TrainInfo::getSeatTypeId,
+                        Collectors.minBy(Comparator.comparing(TrainInfo::getCost))));
 
-        List<TrainIfo> filteredList = minCostTrains.values().stream()
+        List<TrainInfo> filteredList = minCostTrains.values().stream()
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
 
@@ -93,8 +93,8 @@ public class TutuRouteServiceImpl implements TutuRouteService {
         return filteredList;
     }
 
-    private TrainIfo getTrainInfo(TutuTripItemResponse trip, TutuRailwayCarriageResponse category) {
-        TrainIfo trainIfo = new TrainIfo();
+    private TrainInfo getTrainInfo(TutuTripItemResponse trip, TutuRailwayCarriageResponse category) {
+        TrainInfo trainIfo = new TrainInfo();
         trainIfo.setTravelTime(trip.getTravelTimeInSeconds());
 
         TutuStation arrivalStation = tutuStationRepository.findById(trip.getArrivalStation())
@@ -113,11 +113,9 @@ public class TutuRouteServiceImpl implements TutuRouteService {
         return trainIfo;
     }
 
-
-
     // FIXME
     private Long getSeatTypeId(String category) {
-        Long seatTypeId = null;
+        Long seatTypeId;
         switch (category) {
             case "plazcard":
                 seatTypeId = SEAT_TYPE_ID_PLAZCARD;
@@ -141,4 +139,6 @@ public class TutuRouteServiceImpl implements TutuRouteService {
 
         return seatTypeId;
     }
+
+
 }

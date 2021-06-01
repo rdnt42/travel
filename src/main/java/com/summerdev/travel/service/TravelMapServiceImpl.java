@@ -1,25 +1,21 @@
 package com.summerdev.travel.service;
 
 import com.summerdev.travel.entity.GeoName;
-import com.summerdev.travel.entity.TutuRoute;
-import com.summerdev.travel.entity.TutuStation;
+import com.summerdev.travel.entity.TrainInfo;
+import com.summerdev.travel.entity.TravelComfortType;
 import com.summerdev.travel.repository.GeoNameRepository;
+import com.summerdev.travel.repository.TrainInfoRepository;
+import com.summerdev.travel.repository.TravelComfortTypeRepository;
 import com.summerdev.travel.repository.TutuStationRepository;
-import com.summerdev.travel.response.TrainInfoResponse;
 import com.summerdev.travel.response.TravelMapResponse;
-import com.summerdev.travel.response.api.tutu.TutuRailwayCarriageResponse;
-import com.summerdev.travel.response.api.tutu.TutuTrainsResponse;
-import com.summerdev.travel.response.api.tutu.TutuTripItemResponse;
+import com.summerdev.travel.response.api.hotellook.HotelLookHotelsResponse;
 import com.summerdev.travel.service.api.hotellook.HotelLookService;
 import com.summerdev.travel.service.api.tutu.TutuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,76 +25,55 @@ public class TravelMapServiceImpl implements TravelMapService {
 
     private final TutuService tutuService;
     private final HotelLookService hotelLookService;
+    private final TrainInfoService trainInfoService;
 
     private final GeoNameRepository geoNameRepository;
     private final TutuStationRepository tutuStationRepository;
+    private final TrainInfoRepository trainInfoRepository;
+    private final TravelComfortTypeRepository travelComfortTypeRepository;
 
     public TravelMapServiceImpl(TutuService tutuService, HotelLookService hotelLookService,
-                                GeoNameRepository geoNameRepository, TutuStationRepository tutuStationRepository) {
+                                TrainInfoService trainInfoService, GeoNameRepository geoNameRepository, TutuStationRepository tutuStationRepository,
+                                TrainInfoRepository trainInfoRepository, TravelComfortTypeRepository travelComfortTypeRepository) {
         this.tutuService = tutuService;
         this.hotelLookService = hotelLookService;
+        this.trainInfoService = trainInfoService;
         this.geoNameRepository = geoNameRepository;
         this.tutuStationRepository = tutuStationRepository;
+        this.trainInfoRepository = trainInfoRepository;
+        this.travelComfortTypeRepository = travelComfortTypeRepository;
     }
 
     @Override
-    public TravelMapResponse getTravelMap(String departureCity, Long maxCost) {
+    public TravelMapResponse getTravelMap(String departureCityName, Long maxCost, Long travelComfortTypeId) {
         long startTime = new Date().getTime();
-        GeoName geoName = geoNameRepository.findDistinctFirstByGeoNameRu(departureCity);
+        GeoName departureCity = geoNameRepository.findDistinctFirstByGeoNameRu(departureCityName);
 
-        if (geoName == null) {
+        if (departureCity == null) {
             return new TravelMapResponse();
         }
 
-        List<TrainInfoResponse> trainInfoResponses = createTrainInfo(tutuService.getTrainsInfo(geoName));
-        List<TrainInfoResponse> trainInfoResponsesFiltered = trainInfoResponses.stream()
-                .filter(item -> item.getCost() < maxCost)
-                .sorted(Comparator.comparing(TrainInfoResponse::getCost))
-                .limit(10)
-                .collect(Collectors.toList());
+        TravelComfortType comfortType = travelComfortTypeRepository.findById(travelComfortTypeId)
+                .orElseThrow(() -> new NullPointerException("Travel comfort type does not exist, id: " + travelComfortTypeId));
+
+        List<TrainInfo> trainInfos = trainInfoService.getInfoByDepartAndComfortType(departureCity, comfortType);
+
+        Set<GeoName> arrivalCities = trainInfos.stream()
+                .map(TrainInfo::getArrivalCity)
+                .collect(Collectors.toSet());
+
+        Map<GeoName, HotelLookHotelsResponse> lookHotelsResponseMap = new HashMap<>();
+
+        for (GeoName arrivalCity : arrivalCities) {
+            HotelLookHotelsResponse hotels = hotelLookService.getHotelsInfo(arrivalCity);
+            if (hotels != null) {
+                lookHotelsResponseMap.put(arrivalCity, hotels);
+            }
+        }
 
         log.info("Total get train info time: {}", new Date().getTime() - startTime);
 
         return null;
     }
-
-
-    private List<TrainInfoResponse> createTrainInfo(List<TutuTrainsResponse> tutuTrainsResponses) {
-        List<TrainInfoResponse> responses = new ArrayList<>();
-
-        tutuTrainsResponses.forEach(info ->
-                info.getTrips().forEach(trip ->
-                        trip.getCategories().forEach(category -> {
-                                    TrainInfoResponse trainInfo = createTrainInfo(trip, category);
-                                    if (trainInfo != null) {
-                                        responses.add(trainInfo);
-                                    }
-                                }
-                        )));
-
-        return responses;
-    }
-
-    private TrainInfoResponse createTrainInfo(TutuTripItemResponse trip, TutuRailwayCarriageResponse category) {
-        TrainInfoResponse response = new TrainInfoResponse();
-        response.setTravelTime(trip.getTravelTimeInSeconds());
-
-        TutuStation arrivalStation = tutuStationRepository.findById(trip.getArrivalStation())
-                .orElse(null);
-        TutuStation departureStation = tutuStationRepository.findById(trip.getDepartureStation())
-                .orElse(null);
-
-        if (arrivalStation == null || departureStation == null) return null;
-
-        response.setDepartureCity(departureStation.getGeoName());
-        response.setArrivalCity(arrivalStation.getGeoName());
-
-        response.setCost((long) category.getPrice());
-        response.setCategoryName(category.getType());
-
-        return response;
-    }
-
-
 
 }
