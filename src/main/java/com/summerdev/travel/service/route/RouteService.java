@@ -1,4 +1,4 @@
-package com.summerdev.travel.service;
+package com.summerdev.travel.service.route;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,4 +12,5 @@ public interface RouteService {
      */
     void updateTrainsInfo();
 
+    void updateHotelsInfo();
 }

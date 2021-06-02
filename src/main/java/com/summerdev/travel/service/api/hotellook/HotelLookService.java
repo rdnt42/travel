@@ -6,6 +6,7 @@ import com.summerdev.travel.request.TravelMapRequest;
 import com.summerdev.travel.request.api.hotellook.HotelLookRequest;
 import com.summerdev.travel.response.api.hotellook.HotelLookHotelsResponse;
 
+import java.util.Date;
 import java.util.List;
 
 public interface HotelLookService {
@@ -15,5 +16,5 @@ public interface HotelLookService {
 
     List<HotelLookHotelsResponse> getHotelsInfo(TravelMapRequest request);
 
-    HotelLookHotelsResponse getHotelsInfo(GeoName city);
+    HotelLookHotelsResponse getHotelsInfo(GeoName city, Date startDate, Date endDate);
 }

@@ -14,13 +14,20 @@ import com.summerdev.travel.service.api.ApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelLookHotelResponse> {
@@ -36,21 +43,30 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
 
     @Override
     public HotelLookHotelsResponse get(HotelLookRequest request) {
-        UriComponentsBuilder builder = UriComponentsBuilder
+        String encodeLocation;
+        try {
+            encodeLocation = URLEncoder.encode(request.getLocation(), StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+        URI uri = UriComponentsBuilder
                 .fromHttpUrl(Urls.URL_HOTEL_LOOK_GET_HOTELS)
-                .queryParam("location", request.getLocation())
+                .queryParam("location", encodeLocation)
                 .queryParam("checkIn", request.getCheckInFormated())
                 .queryParam("checkOut", request.getCheckOutFormated())
                 .queryParam("adults", request.getAdults())
                 .queryParam("limit", request.getLimit())
                 .queryParam("currency", request.getCurrency())
-                .encode(StandardCharsets.US_ASCII);
-        log.info("builder: {}", builder.toUriString());
+                .build(true)
+                .toUri();
+        log.info("builder: {}", uri.toString());
 
         try {
 
-            ParameterizedTypeReference ref = new ParameterizedTypeReference<List<HotelLookHotelResponse>>() {};
-            ResponseEntity<List<HotelLookHotelResponse>> responseEntity = getResponseByRest(builder, ref);
+            ParameterizedTypeReference<List<HotelLookHotelResponse>> ref = new ParameterizedTypeReference<>() {
+            };
+            ResponseEntity<List<HotelLookHotelResponse>> responseEntity = getResponseByRest(uri, ref);
 
             log.info("Get request status is {}", responseEntity.getStatusCode());
 
@@ -100,12 +116,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
     }
 
     @Override
-    public HotelLookHotelsResponse getHotelsInfo(GeoName city) {
-        Date outDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(outDate);
-        calendar.add(Calendar.DAY_OF_MONTH, 7);
-
-        return get(new HotelLookRequest(city.getGeoNameRu(), new Date(), calendar.getTime()));
+    public HotelLookHotelsResponse getHotelsInfo(GeoName city, Date startDate, Date endDate) {
+        return get(new HotelLookRequest(city.getGeoNameRu(), startDate, endDate));
     }
 }

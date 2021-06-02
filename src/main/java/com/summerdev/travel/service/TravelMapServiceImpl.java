@@ -11,6 +11,7 @@ import com.summerdev.travel.response.TravelMapResponse;
 import com.summerdev.travel.response.api.hotellook.HotelLookHotelsResponse;
 import com.summerdev.travel.service.api.hotellook.HotelLookService;
 import com.summerdev.travel.service.api.tutu.TutuService;
+import com.summerdev.travel.service.route.TrainInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -64,12 +65,12 @@ public class TravelMapServiceImpl implements TravelMapService {
 
         Map<GeoName, HotelLookHotelsResponse> lookHotelsResponseMap = new HashMap<>();
 
-        for (GeoName arrivalCity : arrivalCities) {
-            HotelLookHotelsResponse hotels = hotelLookService.getHotelsInfo(arrivalCity);
-            if (hotels != null) {
-                lookHotelsResponseMap.put(arrivalCity, hotels);
-            }
-        }
+//        for (GeoName arrivalCity : arrivalCities) {
+//            HotelLookHotelsResponse hotels = hotelLookService.getHotelsInfo(arrivalCity);
+//            if (hotels != null) {
+//                lookHotelsResponseMap.put(arrivalCity, hotels);
+//            }
+//        }
 
         log.info("Total get train info time: {}", new Date().getTime() - startTime);
 

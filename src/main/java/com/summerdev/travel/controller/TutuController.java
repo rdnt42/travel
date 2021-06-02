@@ -1,7 +1,7 @@
 package com.summerdev.travel.controller;
 
 import com.summerdev.travel.response.api.tutu.TutuTrainsResponse;
-import com.summerdev.travel.service.RouteService;
+import com.summerdev.travel.service.route.RouteService;
 import com.summerdev.travel.service.api.tutu.TutuService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,12 @@ public class TutuController {
     @GetMapping("/v1/routes/update")
     public void updateRoutes() {
         tutuRouteService.updateTrainsInfo();
+    }
+
+
+    @GetMapping("/v1/hotels/update")
+    public void updateHotels() {
+        tutuRouteService.updateHotelsInfo();
     }
 
 }
