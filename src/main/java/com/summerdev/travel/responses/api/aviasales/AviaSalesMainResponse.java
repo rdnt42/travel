@@ -2,7 +2,13 @@ package com.summerdev.travel.responses.api.aviasales;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -25,9 +31,7 @@ public class AviaSalesMainResponse {
     public AviaSalesMainResponse() {
     }
 
-//    public AviaSalesMainResponse(AviaSalesMainResponse aviaSalesMainResponse) {
-//
-//    }
+
 
     public boolean isSuccess() {
         return success;
@@ -82,5 +86,19 @@ public class AviaSalesMainResponse {
                 ", errorFromResponse='" + error + '\'' +
                 ", currency='" + currency + '\'' +
                 '}';
+    }
+
+    public static void parse(String json) throws JsonProcessingException {
+        JsonFactory factory = new JsonFactory();
+
+        ObjectMapper mapper = new ObjectMapper(factory);
+        JsonNode rootNode = mapper.readTree(json);
+
+        Iterator<Map.Entry<String,JsonNode>> fieldsIterator = rootNode.fields();
+        while (fieldsIterator.hasNext()) {
+
+            Map.Entry<String,JsonNode> field = fieldsIterator.next();
+            System.out.println("Key: " + field.getKey() + "\tValue:" + field.getValue());
+        }
     }
 }

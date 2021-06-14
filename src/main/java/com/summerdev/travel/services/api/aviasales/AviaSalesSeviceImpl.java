@@ -6,16 +6,17 @@ import com.summerdev.travel.responses.api.aviasales.AviaSalesMainResponse;
 import com.summerdev.travel.services.api.ApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
 
 @Service
 public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSalesMainResponse> {
@@ -25,7 +26,7 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
     }
 
     @Override
-    public AviaSalesMainResponse get(AviaSalesRequest request) {
+    public OutputStream get(AviaSalesRequest request) throws IOException {
 
         request.setArrivalStation("MOW");
         request.setDepartureStation("HKT");
@@ -34,36 +35,81 @@ public class AviaSalesSeviceImpl implements AviaSalesService, ApiService<AviaSal
 
         request.setDepartDate("2021-05-11");
         request.setReturnDate("2021-05-24");
-        UriComponentsBuilder builder = UriComponentsBuilder
-                .fromHttpUrl(Urls.URL_AVIASALES_GET_CHEAP_TICKETS)
-                .queryParam("origin", request.getArrivalStation())
-                .queryParam("destination", request.getDepartureStation())
-                .queryParam("depart_date", request.getDepartDate())
-                .queryParam("return_date", request.getReturnDate())
-                .queryParam("token", System.getenv("ENV_AVIASALES_TOKEN"))
-                .encode(StandardCharsets.US_ASCII);
-        log.info("builder: {}", builder.toUriString());
 
-        try {
 
-            //ResponseEntity responseEntity = getRequest(builder, AviaSalesMainResponse.class);
-            ResponseEntity<AviaSalesMainResponse> responseEntity = getRequest(builder, AviaSalesMainResponse.class);
+        URL url = new URL(Urls.URL_AVIASALES_GET_CHEAP_TICKETS);
+        URLConnection con = url.openConnection();
+        HttpURLConnection http = (HttpURLConnection)con;
+        http.setRequestMethod("POST"); // PUT is another valid option
+        http.setDoOutput(true);
 
-            log.info("Get request status is {}", responseEntity.getStatusCode());
+        Map<String,String> arguments = new HashMap<>();
+        arguments.put("origin", request.getArrivalStation());
+        arguments.put("destination", request.getDepartureStation());
+        arguments.put("depart_date", request.getDepartDate());
+        arguments.put("return_date", request.getReturnDate());
+        arguments.put("token", System.getenv("ENV_AVIASALES_TOKEN"));
+        StringJoiner sj = new StringJoiner("&");
+        for(Map.Entry<String,String> entry : arguments.entrySet())
+            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
+        byte[] out = sj.toString().getBytes(StandardCharsets.UTF_8);
+        int length = out.length;
 
-            return responseEntity.getBody();
-        } catch (RestClientException e) {
-            log.error("Get request failed, error: {}", e.getMessage());
+
+        http.setFixedLengthStreamingMode(length);
+        http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+        http.connect();
+        try(OutputStream os = http.getOutputStream()) {
+            os.write(out);
+            return os;
         }
+//        request.setArrivalStation("MOW");
+//        request.setDepartureStation("HKT");
+////        depart_date (optional)	-	Day or month of departure (yyyy-mm-dd or yyyy-mm).
+////        return_date (optional)	-	Day or month of return (yyyy-mm-dd or yyyy-mm).
+//
+//        request.setDepartDate("2021-05-11");
+//        request.setReturnDate("2021-05-24");
+//        UriComponentsBuilder builder = UriComponentsBuilder
+//                .fromHttpUrl(Urls.URL_AVIASALES_GET_CHEAP_TICKETS)
+//                .queryParam("origin", request.getArrivalStation())
+//                .queryParam("destination", request.getDepartureStation())
+//                .queryParam("depart_date", request.getDepartDate())
+//                .queryParam("return_date", request.getReturnDate())
+//                .queryParam("token", System.getenv("ENV_AVIASALES_TOKEN"))
+//                .encode(StandardCharsets.US_ASCII);
+//        log.info("builder: {}", builder.toUriString());
+//
+//        try {
+//
+//            //ResponseEntity responseEntity = getRequest(builder, AviaSalesMainResponse.class);
+//            ResponseEntity<AviaSalesMainResponse> responseEntity = getRequest(builder, AviaSalesMainResponse.class);
+//
+//            log.info("Get request status is {}", responseEntity.getStatusCode());
 
-        return null;
+            //return responseEntity.getBody();
+
+//        } catch (RestClientException e) {
+//            log.error("Get request failed, error: {}", e.getMessage());
+//        }
+//
+//        return null;
     }
+
+
 
 //    private String convertToSimpleDateFormat(Date date)
 //    {
 //        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 //        return formatter.format(date);
 //    }
+public static void main(String[] args) {
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = new Date(1212121212121L);
+
+    System.out.println(formatter.format(date));
+}
 }
 
 //{

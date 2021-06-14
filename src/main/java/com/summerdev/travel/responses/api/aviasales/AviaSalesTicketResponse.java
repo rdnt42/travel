@@ -2,25 +2,25 @@ package com.summerdev.travel.responses.api.aviasales;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.text.DateFormat;
+import java.util.Date;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AviaSalesTicketResponse {
 
     private double price;
-    private String airlane;
+    private String airline;
     private String flight_number;
-    private DateFormat departure_at;
-    private DateFormat return_at;
-    private DateFormat expires_at;
+    private Date departure_at;
+    private Date return_at;
+    private Date expires_at;
 
     public AviaSalesTicketResponse() {
     }
 
-    public AviaSalesTicketResponse(double price, String airlane, String flight_number, DateFormat departure_at, DateFormat return_at, DateFormat expires_at) {
+    public AviaSalesTicketResponse(double price, String airline, String flight_number, Date departure_at, Date return_at, Date expires_at) {
         this.price = price;
-        this.airlane = airlane;
+        this.airline = airline;
         this.flight_number = flight_number;
         this.departure_at = departure_at;
         this.return_at = return_at;
@@ -35,12 +35,12 @@ public class AviaSalesTicketResponse {
         this.price = price;
     }
 
-    public String getAirlane() {
-        return airlane;
+    public String getAirline() {
+        return airline;
     }
 
-    public void setAirlane(String airlane) {
-        this.airlane = airlane;
+    public void setAirline(String airline) {
+        this.airline = airline;
     }
 
     public String getFlight_number() {
@@ -51,27 +51,27 @@ public class AviaSalesTicketResponse {
         this.flight_number = flight_number;
     }
 
-    public DateFormat getDeparture_at() {
+    public Date getDeparture_at() {
         return departure_at;
     }
 
-    public void setDeparture_at(DateFormat departure_at) {
+    public void setDeparture_at(Date departure_at) {
         this.departure_at = departure_at;
     }
 
-    public DateFormat getReturn_at() {
+    public Date getReturn_at() {
         return return_at;
     }
 
-    public void setReturn_at(DateFormat return_at) {
+    public void setReturn_at(Date return_at) {
         this.return_at = return_at;
     }
 
-    public DateFormat getExpires_at() {
+    public Date getExpires_at() {
         return expires_at;
     }
 
-    public void setExpires_at(DateFormat expires_at) {
+    public void setExpires_at(Date expires_at) {
         this.expires_at = expires_at;
     }
 
@@ -80,27 +80,26 @@ public class AviaSalesTicketResponse {
         if (this == o) return true;
         if (!(o instanceof AviaSalesTicketResponse)) return false;
         AviaSalesTicketResponse that = (AviaSalesTicketResponse) o;
-        return Double.compare(that.price, price) == 0 && Objects.equals(airlane, that.airlane) && Objects.equals(flight_number, that.flight_number) && Objects.equals(departure_at, that.departure_at) && Objects.equals(return_at, that.return_at) && Objects.equals(expires_at, that.expires_at);
+        return Double.compare(that.price, price) == 0 && Objects.equals(airline, that.airline) && Objects.equals(flight_number, that.flight_number) && Objects.equals(departure_at, that.departure_at) && Objects.equals(return_at, that.return_at) && Objects.equals(expires_at, that.expires_at);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(price, airlane, flight_number, departure_at, return_at, expires_at);
+        return Objects.hash(price, airline, flight_number, departure_at, return_at, expires_at);
     }
 
     @Override
     public String toString() {
         return "AviaSalesTicketResponse{" +
                 "price=" + price +
-                ", airlane='" + airlane + '\'' +
+                ", airlane='" + airline + '\'' +
                 ", flight_number='" + flight_number + '\'' +
                 ", departure_at=" + departure_at +
                 ", return_at=" + return_at +
                 ", expires_at=" + expires_at +
                 '}';
     }
-
-    //  "price": 40669,
+//  "price": 40669,
 //  "airline": "SU",
 //  "flight_number": 278,
 //  "departure_at": "2021-11-12T04:50:00Z",

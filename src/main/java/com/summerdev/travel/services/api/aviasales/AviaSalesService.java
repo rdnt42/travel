@@ -1,10 +1,12 @@
 package com.summerdev.travel.services.api.aviasales;
 
 import com.summerdev.travel.requests.api.aviasales.AviaSalesRequest;
-import com.summerdev.travel.responses.api.aviasales.AviaSalesMainResponse;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 public interface AviaSalesService {
 
-    AviaSalesMainResponse get(AviaSalesRequest request);
+    OutputStream get(AviaSalesRequest request) throws IOException;
 
 }

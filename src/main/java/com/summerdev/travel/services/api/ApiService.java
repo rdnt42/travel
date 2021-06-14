@@ -30,7 +30,6 @@ public interface ApiService<R> {
 
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
-        // TODO: 05/04/2021 Тема, объясни плиз, почему это get а не post в "HttpMethod.GET"
         return restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, ref);
     }
 }
