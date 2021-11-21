@@ -40,33 +40,6 @@ public class TrainInfoServiceImpl implements TrainInfoService {
     }
 
     @Override
-    public List<TrainInfo> getInfoByDepartAndComfortType(GeoName departureCity, TravelComfortType comfortType) {
-        List<TrainInfo> trainInfos = new ArrayList<>();
-        Long comfortTypeId = comfortType.getId();
-
-        if (comfortTypeId.equals(COMFORT_TYPE_CHEAP)) {
-            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, cheapList);
-        } else if (comfortTypeId.equals(COMFORT_TYPE_COMFORT)) {
-            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, comfortList);
-        } else if (comfortTypeId.equals(COMFORT_TYPE_LUXURY)) {
-            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, luxuryList);
-        }
-
-        if (trainInfos.isEmpty()) {
-            return trainInfos;
-        }
-
-        return  trainInfos.stream()
-                .collect(Collectors.groupingBy(s->s.getSeatTypeId() + "-" + s.getArrivalCity().getGeoName(),
-                        Collectors.minBy(Comparator.comparing(TrainInfo::getCost))))
-                .values().stream()
-                .flatMap(Optional::stream)
-                .sorted(Comparator.comparing(s->s.getArrivalCity().getGeoName()))
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
     public  List<TrainInfo> createTrainsInfo(TutuRoute route) {
         TutuTrainsResponse response = tutuService.getTrainsResponse(route.getDepartureStation(), route.getArrivalStation());
 
@@ -96,6 +69,32 @@ public class TrainInfoServiceImpl implements TrainInfoService {
         trainInfoRepository.saveAll(filteredList);
 
         return filteredList;
+    }
+
+    @Override
+    public List<TrainInfo> getInfoByDepartAndComfortType(GeoName departureCity, TravelComfortType comfortType) {
+        List<TrainInfo> trainInfos = new ArrayList<>();
+        Long comfortTypeId = comfortType.getId();
+
+        if (comfortTypeId.equals(COMFORT_TYPE_CHEAP)) {
+            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, cheapList);
+        } else if (comfortTypeId.equals(COMFORT_TYPE_COMFORT)) {
+            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, comfortList);
+        } else if (comfortTypeId.equals(COMFORT_TYPE_LUXURY)) {
+            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, luxuryList);
+        }
+
+        if (trainInfos.isEmpty()) {
+            return trainInfos;
+        }
+
+        return  trainInfos.stream()
+                .collect(Collectors.groupingBy(s->s.getSeatTypeId() + "-" + s.getArrivalCity().getGeoName(),
+                        Collectors.minBy(Comparator.comparing(TrainInfo::getCost))))
+                .values().stream()
+                .flatMap(Optional::stream)
+                .sorted(Comparator.comparing(s->s.getArrivalCity().getGeoName()))
+                .collect(Collectors.toList());
     }
 
     @Override

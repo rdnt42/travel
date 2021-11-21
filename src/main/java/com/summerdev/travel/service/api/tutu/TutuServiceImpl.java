@@ -1,12 +1,12 @@
 package com.summerdev.travel.service.api.tutu;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.summerdev.travel.constant.api.Urls;
 import com.summerdev.travel.entity.GeoName;
 import com.summerdev.travel.entity.TutuRoute;
 import com.summerdev.travel.entity.TutuStation;
+import com.summerdev.travel.repository.GeoNameRepository;
 import com.summerdev.travel.repository.TutuRouteRepository;
 import com.summerdev.travel.repository.TutuStationRepository;
 import com.summerdev.travel.response.api.tutu.TutuTrainsResponse;
@@ -31,22 +31,21 @@ public class TutuServiceImpl implements TutuService {
     private final TutuStationRepository tutuStationRepository;
     private final TutuRouteRepository tutuRouteRepository;
     private final HttpRequestService httpRequestService;
+    private final GeoNameRepository geoNameRepository;
 
     public TutuServiceImpl(TutuStationRepository tutuStationDirectoryRepository, TutuRouteRepository tutuRouteRepository,
-                           HttpRequestService httpRequestService) {
+                           HttpRequestService httpRequestService, GeoNameRepository geoNameRepository) {
         this.tutuStationRepository = tutuStationDirectoryRepository;
         this.tutuRouteRepository = tutuRouteRepository;
         this.httpRequestService = httpRequestService;
+        this.geoNameRepository = geoNameRepository;
     }
 
     @Override
-    public List<TutuTrainsResponse> getTrainsInfo(String departureCity) {
+    public List<TutuTrainsResponse> getTrainsInfo(GeoName departureCity) {
         List<TutuTrainsResponse> responses = new ArrayList<>();
 
-        if (departureCity == null || departureCity.equals("")) {
-            throw new NullPointerException("Departure city cannot be null");
-        }
-        List<TutuStation> stations = tutuStationRepository.findByStationNameStartsWith(departureCity);
+        List<TutuStation> stations = tutuStationRepository.findByGeoName(departureCity);
 
         for (TutuStation station : stations) {
             List<TutuRoute> routes = tutuRouteRepository.findByDepartureStation(station);
@@ -69,22 +68,13 @@ public class TutuServiceImpl implements TutuService {
     }
 
     @Override
-    public List<TutuTrainsResponse> getTrainsInfo(GeoName departureCity) {
-        return getTrainsInfo(departureCity.getGeoNameRu());
-    }
-
-    @Override
-    public TutuTrainsResponse getTrainsResponse(int departureStation, int arrivalStation) {
-        String response = getUnparsedTrainsResponse(departureStation, arrivalStation);
-        if (response != null) {
-            try {
-                return objectMapper.readValue(response, TutuTrainsResponse.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+    public List<TutuTrainsResponse> getTrainsInfo(String departureCityName) {
+        if (departureCityName == null || departureCityName.isEmpty()) {
+            throw new NullPointerException("departureCityName cannot be empty or null");
         }
+        GeoName departureCity = geoNameRepository.findDistinctFirstByGeoNameRu(departureCityName);
 
-        return null;
+        return getTrainsInfo(departureCity);
     }
 
     @Override
@@ -92,8 +82,7 @@ public class TutuServiceImpl implements TutuService {
         return getTrainsResponse(departureStation.getStationId().intValue(), arrivalStation.getStationId().intValue());
     }
 
-    @Override
-    public String getUnparsedTrainsResponse(int departureStation, int arrivalStation) {
+    private TutuTrainsResponse getTrainsResponse(int departureStation, int arrivalStation) {
         URI uri = UriComponentsBuilder.fromHttpUrl(Urls.URL_TUTU_GET_TRAINS)
                 .queryParam("term", departureStation)
                 .queryParam("term2", arrivalStation)
@@ -101,12 +90,14 @@ public class TutuServiceImpl implements TutuService {
                 .toUri();
         HttpResponse<String> response = httpRequestService.getResponseFromUri(uri);
 
-        if (response.statusCode() == HttpStatus.OK.value() &&
-                !response.body().equals("[]")) {
-            return response.body();
+        if (response.statusCode() == HttpStatus.OK.value() && !response.body().equals("[]")) {
+            try {
+                return objectMapper.readValue(response.body(), TutuTrainsResponse.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
     }
-
 }

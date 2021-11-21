@@ -17,7 +17,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.UnsupportedEncodingException;
@@ -42,7 +41,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
     }
 
     @Override
-    public HotelLookHotelsResponse get(HotelLookRequest request) {
+    public HotelLookHotelsResponse getHotelsResponse(HotelLookRequest request) {
         String encodeLocation;
         try {
             encodeLocation = URLEncoder.encode(request.getLocation(), StandardCharsets.UTF_8.name());
@@ -60,7 +59,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
                 .queryParam("currency", request.getCurrency())
                 .build(true)
                 .toUri();
-        log.info("builder: {}", uri.toString());
+        log.info("builder: {}", uri);
 
         try {
 
@@ -78,8 +77,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
         return null;
     }
 
-    @Override
-    public List<HotelLookHotelsResponse> getHotelsInfo(TravelMapRequest request, List<TutuStation> arrivalStations) {
+    private List<HotelLookHotelsResponse> getHotelsInfo(TravelMapRequest request, List<TutuStation> arrivalStations) {
         List<HotelLookHotelsResponse> responses = new ArrayList<>();
 
         for (TutuStation station : arrivalStations) {
@@ -88,7 +86,7 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
             calendar.setTime(outDate);
             calendar.add(Calendar.DAY_OF_MONTH, 7);
 
-            HotelLookHotelsResponse response = get(
+            HotelLookHotelsResponse response = getHotelsResponse(
                     new HotelLookRequest(station.getStationName(), new Date(), calendar.getTime()));
 
             if (response != null) {
@@ -117,6 +115,6 @@ public class HotelLookServiceImpl implements HotelLookService, ApiService<HotelL
 
     @Override
     public HotelLookHotelsResponse getHotelsInfo(GeoName city, Date startDate, Date endDate) {
-        return get(new HotelLookRequest(city.getGeoNameRu(), startDate, endDate));
+        return getHotelsResponse(new HotelLookRequest(city.getGeoNameRu(), startDate, endDate));
     }
 }
