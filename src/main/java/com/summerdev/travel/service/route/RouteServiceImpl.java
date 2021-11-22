@@ -1,13 +1,16 @@
 package com.summerdev.travel.service.route;
 
-import com.summerdev.travel.entity.*;
-import com.summerdev.travel.repository.TutuRouteRepository;
-import com.summerdev.travel.repository.TutuStationRepository;
+import com.summerdev.travel.entity.GeoName;
+import com.summerdev.travel.entity.TravelComfortType;
+import com.summerdev.travel.entity.route.HotelInfo;
+import com.summerdev.travel.entity.route.TrainInfo;
+import com.summerdev.travel.response.TravelMapItemResponse;
+import com.summerdev.travel.response.TravelMapResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,63 +23,39 @@ import java.util.stream.Collectors;
 public class RouteServiceImpl implements RouteService {
     private final Logger logger = LoggerFactory.getLogger(RouteServiceImpl.class);
 
-    private final TrainInfoService trainInfoService;
-    private final HotelInfoService hotelInfoService;
+    private final TrainInfoServiceImpl trainInfoService;
+    private final HotelInfoServiceImpl hotelInfoService;
 
-    private final TutuRouteRepository tutuRouteRepository;
-    private final TutuStationRepository tutuStationRepository;
-
-    public RouteServiceImpl(TutuRouteRepository tutuRouteRepository, TutuStationRepository tutuStationRepository,
-                            TrainInfoService trainInfoService, HotelInfoService hotelInfoService) {
-        this.tutuRouteRepository = tutuRouteRepository;
+    public RouteServiceImpl(TrainInfoServiceImpl trainInfoService, HotelInfoServiceImpl hotelInfoService) {
         this.trainInfoService = trainInfoService;
-        this.tutuStationRepository = tutuStationRepository;
         this.hotelInfoService = hotelInfoService;
     }
 
-    @Override
-    public void updateTrainsInfo() {
-        List<TrainInfo> oldData = trainInfoService.getAllData();
-        long updatedCount = 0;
-
-        List<TutuRoute> routes = tutuRouteRepository.findAll();
-        for (TutuRoute route : routes) {
-            try {
-                List<TrainInfo> created = trainInfoService.createTrainsInfo(route);
-                updatedCount += created.size();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        trainInfoService.deleteOldTrainsInfo(oldData);
-
-        logger.info("Trains info data updated. Updated count: {}, deleted count: {}", updatedCount, oldData.size());
-    }
 
     @Override
-    public void updateHotelsInfo() {
-        List<HotelInfo> oldData = hotelInfoService.getAll();
-        long updatedCount = 0;
+    public TravelMapResponse getTravelMap(GeoName departureCity, TravelComfortType comfortType) {
+        TravelMapResponse response = new TravelMapResponse();
+        List<TrainInfo> trainInfos = trainInfoService.getMapInfo(departureCity, comfortType);
 
-        List<GeoName> cities = tutuStationRepository.findAll().stream()
-                .map(TutuStation::getGeoName)
-                .collect(Collectors.toList());
+        Set<GeoName> arrivalCities = trainInfos.stream()
+                .map(TrainInfo::getArrivalCity)
+                .collect(Collectors.toSet());
 
-        for (GeoName city : cities) {
-            try {
-                List<HotelInfo> created = hotelInfoService.createHotelsInfo(city);
-                updatedCount += created.size();
+        // Add data from aviasales here
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        List<HotelInfo> hotelInfos = hotelInfoService.getInfo(new ArrayList<>(arrivalCities), comfortType);
+
+        for (TrainInfo trainInfo : trainInfos) {
+            HotelInfo hotelInfo = hotelInfos.stream()
+                    .filter(hotel -> hotel.getCity().getId().equals(
+                            trainInfo.getArrivalCity().getId()))
+                    .findAny()
+                    .orElse(null);
+
+            TravelMapItemResponse itemResponse = new TravelMapItemResponse(trainInfo, hotelInfo);
+            response.addItem(itemResponse);
         }
 
-        hotelInfoService.deleteOldHotelsData(oldData);
-
-        logger.info("Hotels info data updated. Updated count: {}, deleted count: {}", updatedCount, oldData.size());
+        return response;
     }
-
-
 }

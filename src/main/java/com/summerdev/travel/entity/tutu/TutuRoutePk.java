@@ -1,4 +1,4 @@
-package com.summerdev.travel.entity;
+package com.summerdev.travel.entity.tutu;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -1,7 +1,7 @@
 package com.summerdev.travel.service.api.tutu;
 
 import com.summerdev.travel.entity.GeoName;
-import com.summerdev.travel.entity.TutuStation;
+import com.summerdev.travel.entity.tutu.TutuStation;
 import com.summerdev.travel.response.api.tutu.TutuTrainsResponse;
 
 import java.util.List;

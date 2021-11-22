@@ -1,4 +1,6 @@
-package com.summerdev.travel.entity;
+package com.summerdev.travel.entity.tutu;
+
+import com.summerdev.travel.entity.GeoName;
 
 import javax.persistence.*;
 import java.io.Serializable;

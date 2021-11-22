@@ -1,7 +1,7 @@
 package com.summerdev.travel.repository;
 
 import com.summerdev.travel.entity.GeoName;
-import com.summerdev.travel.entity.TrainInfo;
+import com.summerdev.travel.entity.route.TrainInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

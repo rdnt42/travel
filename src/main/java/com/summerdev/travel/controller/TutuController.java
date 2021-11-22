@@ -1,10 +1,11 @@
 package com.summerdev.travel.controller;
 
 import com.summerdev.travel.response.api.tutu.TutuTrainsResponse;
-import com.summerdev.travel.service.route.RouteService;
 import com.summerdev.travel.service.api.tutu.TutuService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -13,27 +14,14 @@ import java.util.List;
 public class TutuController {
 
     private final TutuService tutuService;
-    private final RouteService tutuRouteService;
 
-    public TutuController(TutuService tutuService, RouteService tutuRouteService) {
+    public TutuController(TutuService tutuService) {
         this.tutuService = tutuService;
-        this.tutuRouteService = tutuRouteService;
     }
 
     @GetMapping("/v1/tutu")
     public List<TutuTrainsResponse> get(@RequestParam String departureCity) {
         return tutuService.getTrainsInfo(departureCity);
-    }
-
-    @GetMapping("/v1/routes/update")
-    public void updateRoutes() {
-        tutuRouteService.updateTrainsInfo();
-    }
-
-
-    @GetMapping("/v1/hotels/update")
-    public void updateHotels() {
-        tutuRouteService.updateHotelsInfo();
     }
 
 }

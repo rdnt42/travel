@@ -1,12 +1,19 @@
 package com.summerdev.travel.service.route;
 
-import com.summerdev.travel.entity.*;
+import com.summerdev.travel.entity.GeoName;
+import com.summerdev.travel.entity.TravelComfortType;
+import com.summerdev.travel.entity.route.TrainInfo;
+import com.summerdev.travel.entity.tutu.TutuRoute;
+import com.summerdev.travel.entity.tutu.TutuStation;
 import com.summerdev.travel.repository.TrainInfoRepository;
+import com.summerdev.travel.repository.TutuRouteRepository;
 import com.summerdev.travel.repository.TutuStationRepository;
 import com.summerdev.travel.response.api.tutu.TutuRailwayCarriageResponse;
 import com.summerdev.travel.response.api.tutu.TutuTrainsResponse;
 import com.summerdev.travel.response.api.tutu.TutuTripItemResponse;
 import com.summerdev.travel.service.api.tutu.TutuService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,8 +29,10 @@ import static com.summerdev.travel.entity.TravelComfortType.*;
  * Time: 21:24
  */
 @Service
-public class TrainInfoServiceImpl implements TrainInfoService {
-    private final List<Long> cheapList = Arrays.asList(SEAT_TYPE_ID_COMMON, SEAT_TYPE_ID_PLAZCARD, SEAT_TYPE_ID_SEDENTARY);
+public class TrainInfoServiceImpl implements ITravelInfoService<TrainInfo>, TrainInfoService {
+    Logger logger = LoggerFactory.getLogger(TrainInfoServiceImpl.class);
+
+    private final List<Long> cheapList = Arrays.asList(SEAT_TYPE_ID_COMMON, SEAT_TYPE_ID_ECONOMY, SEAT_TYPE_ID_SEDENTARY);
     private final List<Long> comfortList = Arrays.asList(SEAT_TYPE_ID_COUPE, SEAT_TYPE_ID_SOFT);
     private final List<Long> luxuryList = Collections.singletonList(SEAT_TYPE_ID_LUX);
 
@@ -31,16 +40,65 @@ public class TrainInfoServiceImpl implements TrainInfoService {
     private final TutuService tutuService;
     private final TrainInfoRepository trainInfoRepository;
     private final TutuStationRepository tutuStationRepository;
+    private final TutuRouteRepository tutuRouteRepository;
 
     public TrainInfoServiceImpl(TutuService tutuService, TrainInfoRepository trainInfoRepository,
-                                TutuStationRepository tutuStationRepository) {
+                                TutuStationRepository tutuStationRepository, TutuRouteRepository tutuRouteRepository) {
         this.tutuService = tutuService;
         this.trainInfoRepository = trainInfoRepository;
         this.tutuStationRepository = tutuStationRepository;
+        this.tutuRouteRepository = tutuRouteRepository;
     }
 
     @Override
-    public  List<TrainInfo> createTrainsInfo(TutuRoute route) {
+    public List<TrainInfo> getAllActualInfo() {
+        return trainInfoRepository.findAll();
+    }
+
+    @Override
+    public void updateTravelInfo() {
+        long updatedCount = 0;
+
+        List<TutuRoute> routes = tutuRouteRepository.findAll();
+        for (TutuRoute route : routes) {
+            try {
+                List<TrainInfo> created = createTrainsInfo(route);
+                updatedCount += created.size();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        logger.info("Trains info data updated. Updated count: {}", updatedCount);
+    }
+
+    @Override
+    public List<TrainInfo> getMapInfo(GeoName departureCity, TravelComfortType comfortType) {
+        List<TrainInfo> trainInfos = new ArrayList<>();
+        Long comfortTypeId = comfortType.getId();
+
+        if (comfortTypeId.equals(COMFORT_TYPE_CHEAP)) {
+            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, cheapList);
+        } else if (comfortTypeId.equals(COMFORT_TYPE_COMFORT)) {
+            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, comfortList);
+        } else if (comfortTypeId.equals(COMFORT_TYPE_LUXURY)) {
+            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, luxuryList);
+        }
+
+        if (trainInfos.isEmpty()) {
+            return trainInfos;
+        }
+
+        return trainInfos.stream()
+                .collect(Collectors.groupingBy(s -> s.getSeatTypeId() + "-" + s.getArrivalCity().getGeoName(),
+                        Collectors.minBy(Comparator.comparing(TrainInfo::getCost))))
+                .values().stream()
+                .flatMap(Optional::stream)
+                .sorted(Comparator.comparing(s -> s.getArrivalCity().getGeoName()))
+                .collect(Collectors.toList());
+    }
+
+    private List<TrainInfo> createTrainsInfo(TutuRoute route) {
         TutuTrainsResponse response = tutuService.getTrainsResponse(route.getDepartureStation(), route.getArrivalStation());
 
         if (response == null) return new ArrayList<>();
@@ -71,42 +129,6 @@ public class TrainInfoServiceImpl implements TrainInfoService {
         return filteredList;
     }
 
-    @Override
-    public List<TrainInfo> getInfoByDepartAndComfortType(GeoName departureCity, TravelComfortType comfortType) {
-        List<TrainInfo> trainInfos = new ArrayList<>();
-        Long comfortTypeId = comfortType.getId();
-
-        if (comfortTypeId.equals(COMFORT_TYPE_CHEAP)) {
-            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, cheapList);
-        } else if (comfortTypeId.equals(COMFORT_TYPE_COMFORT)) {
-            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, comfortList);
-        } else if (comfortTypeId.equals(COMFORT_TYPE_LUXURY)) {
-            trainInfos = trainInfoRepository.findAllByDepartureCityAndSeatTypeIdIn(departureCity, luxuryList);
-        }
-
-        if (trainInfos.isEmpty()) {
-            return trainInfos;
-        }
-
-        return  trainInfos.stream()
-                .collect(Collectors.groupingBy(s->s.getSeatTypeId() + "-" + s.getArrivalCity().getGeoName(),
-                        Collectors.minBy(Comparator.comparing(TrainInfo::getCost))))
-                .values().stream()
-                .flatMap(Optional::stream)
-                .sorted(Comparator.comparing(s->s.getArrivalCity().getGeoName()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void deleteOldTrainsInfo(List<TrainInfo> oldData) {
-        trainInfoRepository.deleteAll(oldData);
-    }
-
-    @Override
-    public List<TrainInfo> getAllData() {
-        return trainInfoRepository.findAll();
-    }
-
     private TrainInfo getTrainInfo(TutuTripItemResponse trip, TutuRailwayCarriageResponse category) {
         TrainInfo trainIfo = new TrainInfo();
         trainIfo.setTravelTime(trip.getTravelTimeInSeconds());
@@ -127,12 +149,11 @@ public class TrainInfoServiceImpl implements TrainInfoService {
         return trainIfo;
     }
 
-    // FIXME
     private Long getSeatTypeId(String category) {
         Long seatTypeId;
         switch (category) {
             case "plazcard":
-                seatTypeId = SEAT_TYPE_ID_PLAZCARD;
+                seatTypeId = SEAT_TYPE_ID_ECONOMY;
                 break;
             case "coupe":
                 seatTypeId = SEAT_TYPE_ID_COUPE;

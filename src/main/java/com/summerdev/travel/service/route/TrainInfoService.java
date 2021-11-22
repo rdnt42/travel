@@ -1,9 +1,8 @@
 package com.summerdev.travel.service.route;
 
 import com.summerdev.travel.entity.GeoName;
-import com.summerdev.travel.entity.TrainInfo;
 import com.summerdev.travel.entity.TravelComfortType;
-import com.summerdev.travel.entity.TutuRoute;
+import com.summerdev.travel.entity.route.TrainInfo;
 
 import java.util.List;
 
@@ -14,11 +13,5 @@ import java.util.List;
  * Time: 21:24
  */
 public interface TrainInfoService {
-    List<TrainInfo> getInfoByDepartAndComfortType(GeoName departureCity, TravelComfortType comfortType);
-
-    List<TrainInfo> createTrainsInfo(TutuRoute route);
-
-    void deleteOldTrainsInfo(List<TrainInfo> oldData);
-
-    List<TrainInfo> getAllData();
+    List<TrainInfo> getMapInfo(GeoName departureCity, TravelComfortType comfortType);
 }

@@ -1,4 +1,7 @@
-package com.summerdev.travel.entity;
+package com.summerdev.travel.entity.route;
+
+import com.summerdev.travel.entity.GeoName;
+import com.summerdev.travel.entity.SeatType;
 
 import javax.persistence.*;
 import java.io.Serializable;

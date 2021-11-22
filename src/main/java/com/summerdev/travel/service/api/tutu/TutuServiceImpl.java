@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.summerdev.travel.constant.api.Urls;
 import com.summerdev.travel.entity.GeoName;
-import com.summerdev.travel.entity.TutuRoute;
-import com.summerdev.travel.entity.TutuStation;
+import com.summerdev.travel.entity.tutu.TutuRoute;
+import com.summerdev.travel.entity.tutu.TutuStation;
 import com.summerdev.travel.repository.GeoNameRepository;
 import com.summerdev.travel.repository.TutuRouteRepository;
 import com.summerdev.travel.repository.TutuStationRepository;
@@ -70,9 +70,10 @@ public class TutuServiceImpl implements TutuService {
     @Override
     public List<TutuTrainsResponse> getTrainsInfo(String departureCityName) {
         if (departureCityName == null || departureCityName.isEmpty()) {
-            throw new NullPointerException("departureCityName cannot be empty or null");
+            throw new NullPointerException("DepartureCityName cannot be empty or null");
         }
-        GeoName departureCity = geoNameRepository.findDistinctFirstByGeoNameRu(departureCityName);
+        GeoName departureCity = geoNameRepository.findDistinctFirstByGeoNameRu(departureCityName)
+                .orElseThrow(() -> new NullPointerException("Departure city don't find"));
 
         return getTrainsInfo(departureCity);
     }

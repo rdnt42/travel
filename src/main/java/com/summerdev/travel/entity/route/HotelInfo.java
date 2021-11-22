@@ -1,4 +1,6 @@
-package com.summerdev.travel.entity;
+package com.summerdev.travel.entity.route;
+
+import com.summerdev.travel.entity.GeoName;
 
 import javax.persistence.*;
 
@@ -22,6 +24,8 @@ public class HotelInfo {
     private Long stars;
 
     private Long cost;
+
+    private Boolean isActualData;
 
     public Long getId() {
         return id;
@@ -53,5 +57,13 @@ public class HotelInfo {
 
     public void setCost(Long cost) {
         this.cost = cost;
+    }
+
+    public Boolean getActualData() {
+        return isActualData;
+    }
+
+    public void setActualData(Boolean actualData) {
+        isActualData = actualData;
     }
 }

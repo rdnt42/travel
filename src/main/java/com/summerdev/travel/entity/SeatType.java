@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,9 +14,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "seat_types")
-public class SeatType {
+public class SeatType implements Serializable {
     public static final Long SEAT_TYPE_ID_COMMON = 0L;
-    public static final Long SEAT_TYPE_ID_PLAZCARD = 1L;
+    public static final Long SEAT_TYPE_ID_ECONOMY = 1L;
     public static final Long SEAT_TYPE_ID_COUPE = 2L;
     public static final Long SEAT_TYPE_ID_SEDENTARY = 3L;
     public static final Long SEAT_TYPE_ID_LUX = 4L;

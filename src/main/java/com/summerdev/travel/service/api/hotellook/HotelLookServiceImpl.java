@@ -2,8 +2,8 @@ package com.summerdev.travel.service.api.hotellook;
 
 import com.summerdev.travel.constant.api.Urls;
 import com.summerdev.travel.entity.GeoName;
-import com.summerdev.travel.entity.TutuRoute;
-import com.summerdev.travel.entity.TutuStation;
+import com.summerdev.travel.entity.tutu.TutuRoute;
+import com.summerdev.travel.entity.tutu.TutuStation;
 import com.summerdev.travel.repository.TutuRouteRepository;
 import com.summerdev.travel.repository.TutuStationRepository;
 import com.summerdev.travel.request.TravelMapRequest;

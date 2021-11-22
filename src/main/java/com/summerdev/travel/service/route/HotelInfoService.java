@@ -1,7 +1,8 @@
 package com.summerdev.travel.service.route;
 
 import com.summerdev.travel.entity.GeoName;
-import com.summerdev.travel.entity.HotelInfo;
+import com.summerdev.travel.entity.TravelComfortType;
+import com.summerdev.travel.entity.route.HotelInfo;
 
 import java.util.List;
 
@@ -12,8 +13,5 @@ import java.util.List;
  * Time: 20:39
  */
 public interface HotelInfoService {
-    List<HotelInfo> getAll();
-
-    void deleteOldHotelsData(List<HotelInfo> oldData);
-    List<HotelInfo> createHotelsInfo(GeoName city);
+    List<HotelInfo> getInfo(List<GeoName> cities, TravelComfortType comfortType);
 }

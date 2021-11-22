@@ -1,5 +1,9 @@
 package com.summerdev.travel.service.route;
 
+import com.summerdev.travel.entity.GeoName;
+import com.summerdev.travel.entity.TravelComfortType;
+import com.summerdev.travel.response.TravelMapResponse;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alovyannikov
@@ -7,10 +11,5 @@ package com.summerdev.travel.service.route;
  * Time: 18:55
  */
 public interface RouteService {
-    /**
-     * Update actual data from tutu.ru by trains
-     */
-    void updateTrainsInfo();
-
-    void updateHotelsInfo();
+    TravelMapResponse getTravelMap(GeoName departureCity, TravelComfortType comfortType);
 }

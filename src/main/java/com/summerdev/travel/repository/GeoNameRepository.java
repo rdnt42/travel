@@ -3,7 +3,7 @@ package com.summerdev.travel.repository;
 import com.summerdev.travel.entity.GeoName;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,5 +12,5 @@ import java.util.List;
  * Time: 17:04
  */
 public interface GeoNameRepository extends JpaRepository<GeoName, Long> {
-    GeoName findDistinctFirstByGeoNameRu(String geoNameRu);
+    Optional<GeoName> findDistinctFirstByGeoNameRu(String geoNameRu);
 }

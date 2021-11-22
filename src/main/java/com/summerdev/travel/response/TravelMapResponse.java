@@ -3,16 +3,21 @@ package com.summerdev.travel.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TravelMapResponse {
-    ArrayList<TravelMapItemResponse> travelMapItems = new ArrayList<>();
+    private List<TravelMapItemResponse> travelMapItems = new ArrayList<>();
 
-    public ArrayList<TravelMapItemResponse> getTravelMapItems() {
+    public void addItem(TravelMapItemResponse itemResponse) {
+        travelMapItems.add(itemResponse);
+    }
+
+    public List<TravelMapItemResponse> getTravelMapItems() {
         return travelMapItems;
     }
 
-    public void setTravelMapItems(ArrayList<TravelMapItemResponse> travelMapItems) {
+    public void setTravelMapItems(List<TravelMapItemResponse> travelMapItems) {
         this.travelMapItems = travelMapItems;
     }
 }
