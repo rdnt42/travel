@@ -6,11 +6,11 @@ import com.summerdev.travel.entity.route.HotelInfo;
 import com.summerdev.travel.entity.route.TrainInfo;
 import com.summerdev.travel.response.TravelMapItemResponse;
 import com.summerdev.travel.response.TravelMapResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class RouteServiceImpl implements RouteService {
-    private final Logger logger = LoggerFactory.getLogger(RouteServiceImpl.class);
 
     private final TrainInfoServiceImpl trainInfoService;
     private final HotelInfoServiceImpl hotelInfoService;
