@@ -1,6 +1,6 @@
 package com.summerdev.travel.repository;
 
-import com.summerdev.travel.entity.GeoName;
+import com.summerdev.travel.entity.GeoNameData;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -11,6 +11,6 @@ import java.util.Optional;
  * Date: 29.05.2021
  * Time: 17:04
  */
-public interface GeoNameRepository extends JpaRepository<GeoName, Long> {
-    Optional<GeoName> findDistinctFirstByGeoNameRu(String geoNameRu);
+public interface GeoNameRepository extends JpaRepository<GeoNameData, Long> {
+    Optional<GeoNameData> findDistinctFirstByGeoNameRu(String geoNameRu);
 }

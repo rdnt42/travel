@@ -1,13 +1,18 @@
 package com.summerdev.travel.entity.tutu;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
+@Getter
 @Table(name = "tutu_routes")
+@Entity
 public class TutuRoute implements Serializable {
-    @EmbeddedId
-    private TutuRoutePk id;
+    @Id
+    @Column(name = "tutu_route_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "departure_station_id", insertable = false, updatable = false)
@@ -17,28 +22,5 @@ public class TutuRoute implements Serializable {
     @JoinColumn(name = "arrival_station_id", insertable = false, updatable = false)
     private TutuStation arrivalStation;
 
-    public TutuRoutePk getId() {
-        return id;
-    }
-
-    public void setId(TutuRoutePk id) {
-        this.id = id;
-    }
-
-    public TutuStation getDepartureStation() {
-        return departureStation;
-    }
-
-    public void setDepartureStation(TutuStation departureStation) {
-        this.departureStation = departureStation;
-    }
-
-    public TutuStation getArrivalStation() {
-        return arrivalStation;
-    }
-
-    public void setArrivalStation(TutuStation arrivalStation) {
-        this.arrivalStation = arrivalStation;
-    }
-
 }
+

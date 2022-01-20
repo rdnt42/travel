@@ -1,6 +1,6 @@
 package com.summerdev.travel.response;
 
-import com.summerdev.travel.entity.GeoName;
+import com.summerdev.travel.entity.GeoNameData;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,25 +9,25 @@ import com.summerdev.travel.entity.GeoName;
  * Time: 14:45
  */
 public class TrainInfoResponse {
-    private GeoName departureCity;
-    private GeoName arrivalCity;
+    private GeoNameData departureCity;
+    private GeoNameData arrivalCity;
     private Long travelTime;
     private String categoryName;
     private Long cost;
 
-    public GeoName getDepartureCity() {
+    public GeoNameData getDepartureCity() {
         return departureCity;
     }
 
-    public void setDepartureCity(GeoName departureCity) {
+    public void setDepartureCity(GeoNameData departureCity) {
         this.departureCity = departureCity;
     }
 
-    public GeoName getArrivalCity() {
+    public GeoNameData getArrivalCity() {
         return arrivalCity;
     }
 
-    public void setArrivalCity(GeoName arrivalCity) {
+    public void setArrivalCity(GeoNameData arrivalCity) {
         this.arrivalCity = arrivalCity;
     }
 

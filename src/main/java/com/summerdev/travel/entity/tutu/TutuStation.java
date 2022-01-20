@@ -1,6 +1,6 @@
 package com.summerdev.travel.entity.tutu;
 
-import com.summerdev.travel.entity.GeoName;
+import com.summerdev.travel.entity.GeoNameData;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +15,7 @@ public class TutuStation implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "geo_name_id")
-    private GeoName geoName;
+    private GeoNameData geoName;
 
     public Long getStationId() {
         return stationId;
@@ -33,11 +33,11 @@ public class TutuStation implements Serializable {
         this.stationName = stationName;
     }
 
-    public GeoName getGeoName() {
+    public GeoNameData getGeoName() {
         return geoName;
     }
 
-    public void setGeoName(GeoName geoName) {
+    public void setGeoName(GeoNameData geoName) {
         this.geoName = geoName;
     }
 }
