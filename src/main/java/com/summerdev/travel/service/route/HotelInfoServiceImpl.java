@@ -26,19 +26,5 @@ public class HotelInfoServiceImpl implements HotelInfoService {
     @Override
     public List<HotelInfo> getInfo(List<GeoNameData> cities, String comfortType) {
         return null;
-//        return hotelInfoRepository.findAllByCityAndPrice(cities, 1000.0);
-//        return hotelInfoRepository.findAllByCityAndPrice(cities);
-
-//        List<HotelInfo> hotelInfos = new ArrayList<>();
-//
-//        if (comfortType.equals(COMFORT_TYPE_CHEAP.toString())) {
-//            hotelInfos = hotelInfoRepository.findAllByCityInAndStarsIn(cities, cheapList);
-//        } else if (comfortType.equals(COMFORT_TYPE_COMFORT.toString())) {
-//            hotelInfos = hotelInfoRepository.findAllByCityInAndStarsIn(cities, comfortList);
-//        } else if (comfortType.equals(COMFORT_TYPE_LUXURY.toString())) {
-//            hotelInfos = hotelInfoRepository.findAllByCityInAndStarsIn(cities, luxuryList);
-//        }
-//
-//        return hotelInfos;
     }
 }

@@ -1,6 +1,5 @@
 package com.summerdev.travel.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 

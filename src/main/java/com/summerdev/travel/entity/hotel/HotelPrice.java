@@ -1,7 +1,6 @@
 package com.summerdev.travel.entity.hotel;
 
 import com.summerdev.travel.entity.directory.ComfortType;
-import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.Column;

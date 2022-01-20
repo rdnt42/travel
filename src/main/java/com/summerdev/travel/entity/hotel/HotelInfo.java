@@ -2,7 +2,6 @@ package com.summerdev.travel.entity.hotel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.summerdev.travel.entity.GeoNameData;
-import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.CascadeType;
