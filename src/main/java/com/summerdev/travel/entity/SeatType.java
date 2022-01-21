@@ -1,5 +1,8 @@
 package com.summerdev.travel.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,35 +15,16 @@ import java.io.Serializable;
  * Date: 30.05.2021
  * Time: 19:24
  */
-@Entity
+@Getter
+@Setter
 @Table(name = "seat_types")
+@Entity
 public class SeatType implements Serializable {
-    public static final Long SEAT_TYPE_ID_COMMON = 0L;
-    public static final Long SEAT_TYPE_ID_ECONOMY = 1L;
-    public static final Long SEAT_TYPE_ID_COUPE = 2L;
-    public static final Long SEAT_TYPE_ID_SEDENTARY = 3L;
-    public static final Long SEAT_TYPE_ID_LUX = 4L;
-    public static final Long SEAT_TYPE_ID_SOFT = 5L;
-
     @Id
     @Column(name = "seat_type_id")
     private Long id;
 
+    @Column(name = "seat_type_name")
     private String seatTypeName;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSeatTypeName() {
-        return seatTypeName;
-    }
-
-    public void setSeatTypeName(String seatTypeName) {
-        this.seatTypeName = seatTypeName;
-    }
 }

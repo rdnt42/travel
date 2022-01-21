@@ -1,0 +1,5 @@
+# GET TRAVEL MAP
+GET http://localhost:8081/travel/api/v1/travel_map?departureCityName=Москва&maxCost=50000&travelComfortType=COMFORT_TYPE_COMFORT&days=10
+Accept: application/json
+
+###
