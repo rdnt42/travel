@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:jdk-11.0.2.9-slim
+FROM adoptopenjdk/openjdk:17-oracle
 WORKDIR /opt
 ENV PORT 8081
 EXPOSE 8081
