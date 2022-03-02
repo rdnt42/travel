@@ -1,13 +1,13 @@
-# GET TRAVEL MAP
+# GET TRAVEL MAP local
 GET http://localhost:8081/travel/api/v1/travel_map?departureCityName=Москва&maxCost=50000&travelComfortType=COMFORT_TYPE_COMFORT&days=10
 Accept: application/json
 
 ###
-#
-GET http://95.165.108.244:8081/travel/api/v1/travel_map?departureCityName=Москва&maxCost=50000&travelComfortType=COMFORT_TYPE_COMFORT&days=10
+# GET TRAVEL MAP server
+GET http://95.165.108.244:30000/travel/api/v1/travel_map?departureCityName=Москва&maxCost=50000&travelComfortType=COMFORT_TYPE_COMFORT&days=10
 Accept: application/json
 
 ###
-#
+# GET TRAVEL MAP server
 GET http://summer-dev.ru/travel/api/v1/travel_map?departureCityName=Москва&maxCost=50000&travelComfortType=COMFORT_TYPE_COMFORT&days=10
 Accept: application/json

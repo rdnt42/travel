@@ -36,6 +36,9 @@ public class HotelInfo implements Serializable {
     @JoinColumn(name = "city_id")
     private GeoNameData city;
 
+    @Column(name = "city_id", insertable = false, updatable = false)
+    private Long cityId;
+
     private Long stars;
 
     private Date lastUpdate;
