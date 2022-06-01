@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -31,13 +32,12 @@ public class TravelMapServiceImpl implements TravelMapService {
     public TravelMapResponse getTravelMap(String departureCityName, Long maxCost,
                                           String travelComfortType, Long days) {
 
-        GeoNameData departureCity = geoNameRepository.findDistinctFirstByGeoNameRu(departureCityName)
-                .orElse(null);
-        if (departureCity == null) return new TravelMapResponse();
+        Optional<GeoNameData> departureCity = geoNameRepository.findDistinctFirstByGeoNameRu(departureCityName);
+        if (departureCity.isEmpty()) return new TravelMapResponse();
 
         ComfortType comfortType = ComfortType.fromString(travelComfortType);
 
-        List<TrainPrice> trainPrices = trainPriceService.getTrainPricesForTrip(maxCost, comfortType, departureCity);
+        List<TrainPrice> trainPrices = trainPriceService.getTrainPricesForTrip(maxCost, comfortType, departureCity.get());
         List<GeoNameData> arrivalCities = trainPriceService.getArrivalCities(trainPrices);
         List<HotelPrice> hotelPrices = hotelPriceService.getHotelsPricesForTrip(arrivalCities, maxCost, comfortType);
 
