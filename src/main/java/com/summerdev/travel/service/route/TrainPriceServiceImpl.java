@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,7 +42,7 @@ public class TrainPriceServiceImpl implements TrainPriceService {
         return trainPrices.stream()
                 .map(price -> price.getTrainInfo().getArrivalCity())
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

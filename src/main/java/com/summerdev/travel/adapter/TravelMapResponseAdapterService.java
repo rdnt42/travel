@@ -8,7 +8,6 @@ import com.summerdev.travel.response.TravelMapResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,14 +37,14 @@ public class TravelMapResponseAdapterService {
         return hotelPrices.stream()
                 .filter(hotelPrice -> hotelPrice.getHotelInfo().getCity().getId().equals(city.getId()))
                 .limit(1)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<TrainPrice> getFilteredTrainPricesByCity(List<TrainPrice> trainPrices, GeoNameData city) {
         return trainPrices.stream()
                 .filter(trainPrice -> trainPrice.getTrainInfo().getArrivalCity().getId().equals(city.getId()))
                 .limit(1)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }
