@@ -1,7 +1,7 @@
 package com.summerdev.travel.repository;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.entity.directory.ComfortType;
+import com.summerdev.travel.entity.directory.ComfortTypes;
 import com.summerdev.travel.entity.train.TrainPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,5 +15,5 @@ import java.util.List;
  */
 public interface TrainPriceRepository extends JpaRepository<TrainPrice, Long> {
     List<TrainPrice> findAllByTrainInfoDepartureCityAndCostLessThanAndComfortType(
-            GeoNameData departureCity, Double cost, ComfortType comfortType);
+            GeoNameData departureCity, Double cost, ComfortTypes comfortType);
 }

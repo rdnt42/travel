@@ -1,7 +1,7 @@
 package com.summerdev.travel.entity.train;
 
 import com.summerdev.travel.entity.SeatType;
-import com.summerdev.travel.entity.directory.ComfortType;
+import com.summerdev.travel.entity.directory.ComfortTypes;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -44,7 +44,7 @@ public class TrainPrice implements Serializable {
 
     @Column(name = "comfort_type")
     @Enumerated(EnumType.STRING)
-    private ComfortType comfortType;
+    private ComfortTypes comfortType;
 
     @Column(name = "seat_type_id")
     private Long seatTypeId;

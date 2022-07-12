@@ -1,6 +1,6 @@
 package com.summerdev.travel.entity.hotel;
 
-import com.summerdev.travel.entity.directory.ComfortType;
+import com.summerdev.travel.entity.directory.ComfortTypes;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -39,5 +39,5 @@ public class HotelPrice implements Serializable {
 
     @Column(name = "comfort_type")
     @Enumerated(EnumType.STRING)
-    private ComfortType comfortType;
+    private ComfortTypes comfortType;
 }

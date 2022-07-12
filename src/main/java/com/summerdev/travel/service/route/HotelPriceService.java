@@ -1,7 +1,7 @@
 package com.summerdev.travel.service.route;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.entity.directory.ComfortType;
+import com.summerdev.travel.entity.directory.ComfortTypes;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 
 import java.util.List;
@@ -13,5 +13,5 @@ import java.util.List;
  * Time: 20:39
  */
 public interface HotelPriceService {
-    List<HotelPrice> getHotelsPricesForTrip(List<GeoNameData> cities, Long totalBudget, ComfortType comfortType);
+    List<HotelPrice> getHotelsPricesForTrip(List<GeoNameData> cities, Long totalBudget, ComfortTypes comfortType);
 }

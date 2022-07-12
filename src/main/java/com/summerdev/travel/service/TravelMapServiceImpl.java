@@ -2,7 +2,7 @@ package com.summerdev.travel.service;
 
 import com.summerdev.travel.adapter.TravelMapResponseAdapterService;
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.entity.directory.ComfortType;
+import com.summerdev.travel.entity.directory.ComfortTypes;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 import com.summerdev.travel.entity.train.TrainPrice;
 import com.summerdev.travel.repository.GeoNameRepository;
@@ -35,13 +35,12 @@ public class TravelMapServiceImpl implements TravelMapService {
         Optional<GeoNameData> departureCity = geoNameRepository.findDistinctFirstByGeoNameRu(departureCityName);
         if (departureCity.isEmpty()) return new TravelMapResponse();
 
-        ComfortType comfortType = ComfortType.fromString(travelComfortType);
+        ComfortTypes comfortTypes = ComfortTypes.fromString(travelComfortType);
 
-        List<TrainPrice> trainPrices = trainPriceService.getTrainPricesForTrip(maxCost, comfortType, departureCity.get());
+        List<TrainPrice> trainPrices = trainPriceService.getTrainPricesForTrip(maxCost, comfortTypes, departureCity.get());
         List<GeoNameData> arrivalCities = trainPriceService.getArrivalCities(trainPrices);
-        List<HotelPrice> hotelPrices = hotelPriceService.getHotelsPricesForTrip(arrivalCities, maxCost, comfortType);
+        List<HotelPrice> hotelPrices = hotelPriceService.getHotelsPricesForTrip(arrivalCities, maxCost, comfortTypes);
 
         return travelMapResponseAdapterService.getResponseFromPrices(trainPrices, hotelPrices, arrivalCities);
     }
-
 }
