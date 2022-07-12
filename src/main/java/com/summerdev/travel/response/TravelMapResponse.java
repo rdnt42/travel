@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 public class TravelMapResponse {
-    private List<TravelMapItemResponse> travelMapItems = new ArrayList<>();
+    private List<RouteResponse> routeResponses = new ArrayList<>();
 
-    public void addItem(TravelMapItemResponse travelMapItem) {
-        travelMapItems.add(travelMapItem);
+    public void addItem(RouteResponse travelMapItem) {
+        routeResponses.add(travelMapItem);
     }
 
 }
