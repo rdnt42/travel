@@ -1,0 +1,3 @@
+[submodule "travel-web"]
+	path = travel-web
+	url = https://github.com/rdnt42/travel-web
