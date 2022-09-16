@@ -1,7 +1,7 @@
 package com.summerdev.travel.service.route;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.entity.directory.ComfortTypes;
+import com.summerdev.travel.enums.ComfortTypes;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 
 import java.util.List;

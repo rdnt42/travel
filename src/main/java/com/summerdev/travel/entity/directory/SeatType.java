@@ -1,4 +1,4 @@
-package com.summerdev.travel.entity;
+package com.summerdev.travel.entity.directory;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,4 +27,23 @@ public class SeatType implements Serializable {
     @Column(name = "seat_type_name")
     private String seatTypeName;
 
+    /**
+     * Created with IntelliJ IDEA.
+     * User: marowak
+     * Date: 15.09.2022
+     * Time: 21:47
+     */
+    @Setter
+    @Getter
+    @Table(name = "comfort_types")
+    @Entity
+    public static class ComfortType implements Serializable {
+
+        @Column(name = "comfort_type_id")
+        @Id
+        private Integer id;
+
+        @Column(name = "comfort_type_name")
+        private String comfortTypeName;
+    }
 }

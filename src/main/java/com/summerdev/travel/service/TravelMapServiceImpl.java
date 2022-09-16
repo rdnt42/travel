@@ -2,7 +2,7 @@ package com.summerdev.travel.service;
 
 import com.summerdev.travel.adapter.TravelMapResponseAdapterService;
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.entity.directory.ComfortTypes;
+import com.summerdev.travel.enums.ComfortTypes;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 import com.summerdev.travel.entity.train.TrainPrice;
 import com.summerdev.travel.repository.GeoNameRepository;

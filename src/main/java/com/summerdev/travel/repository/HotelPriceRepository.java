@@ -1,7 +1,7 @@
 package com.summerdev.travel.repository;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.entity.directory.ComfortTypes;
+import com.summerdev.travel.enums.ComfortTypes;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 

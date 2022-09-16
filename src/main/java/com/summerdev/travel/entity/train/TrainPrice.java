@@ -1,7 +1,7 @@
 package com.summerdev.travel.entity.train;
 
-import com.summerdev.travel.entity.SeatType;
-import com.summerdev.travel.entity.directory.ComfortTypes;
+import com.summerdev.travel.entity.directory.SeatType;
+import com.summerdev.travel.enums.ComfortTypes;
 import lombok.Getter;
 
 import javax.persistence.Column;
