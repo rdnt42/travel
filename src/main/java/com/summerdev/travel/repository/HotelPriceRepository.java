@@ -1,7 +1,7 @@
 package com.summerdev.travel.repository;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.enums.ComfortTypes;
+import com.summerdev.travel.entity.directory.ComfortType;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,6 +15,6 @@ import java.util.List;
  */
 public interface HotelPriceRepository extends JpaRepository<HotelPrice, Long> {
     List<HotelPrice> findAllByHotelInfoCityInAndCostLessThanAndComfortType(
-            List<GeoNameData> cities, Double cost, ComfortTypes comfortType);
+            List<GeoNameData> cities, Double cost, ComfortType comfortType);
 
 }

@@ -1,17 +1,9 @@
 package com.summerdev.travel.entity.hotel;
 
-import com.summerdev.travel.enums.ComfortTypes;
+import com.summerdev.travel.entity.directory.ComfortType;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -37,7 +29,7 @@ public class HotelPrice implements Serializable {
 
     private Double cost;
 
-    @Column(name = "comfort_type")
-    @Enumerated(EnumType.STRING)
-    private ComfortTypes comfortType;
+    @ManyToOne
+    @JoinColumn(name = "comfort_type_id")
+    private ComfortType comfortType;
 }

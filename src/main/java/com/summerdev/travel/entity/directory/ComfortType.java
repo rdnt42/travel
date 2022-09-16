@@ -11,19 +11,20 @@ import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
- * User: alovyannikov
- * Date: 30.05.2021
- * Time: 19:24
+ * User: marowak
+ * Date: 15.09.2022
+ * Time: 21:47
  */
-@Getter
 @Setter
-@Table(name = "seat_types")
+@Getter
+@Table(name = "comfort_types")
 @Entity
-public class SeatType implements Serializable {
-    @Id
-    @Column(name = "seat_type_id")
-    private Long id;
+public class ComfortType implements Serializable {
 
-    @Column(name = "seat_type_name")
-    private String seatTypeName;
+    @Column(name = "comfort_type_id")
+    @Id
+    private Integer id;
+
+    @Column(name = "comfort_type_name")
+    private String comfortTypeName;
 }

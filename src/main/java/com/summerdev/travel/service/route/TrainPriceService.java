@@ -1,7 +1,7 @@
 package com.summerdev.travel.service.route;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.enums.ComfortTypes;
+import com.summerdev.travel.entity.directory.ComfortType;
 import com.summerdev.travel.entity.train.TrainPrice;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * Time: 19:30
  */
 public interface TrainPriceService {
-    List<TrainPrice> getTrainPricesForTrip(Long totalBudget, ComfortTypes comfortType, GeoNameData departureCity);
+    List<TrainPrice> getTrainPricesForTrip(Long totalBudget, ComfortType comfortType, GeoNameData departureCity);
 
     List<GeoNameData> getArrivalCities(List<TrainPrice> trainPrices);
 }

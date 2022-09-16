@@ -1,20 +1,10 @@
 package com.summerdev.travel.entity.train;
 
+import com.summerdev.travel.entity.directory.ComfortType;
 import com.summerdev.travel.entity.directory.SeatType;
-import com.summerdev.travel.enums.ComfortTypes;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -42,9 +32,9 @@ public class TrainPrice implements Serializable {
 
     private Double cost;
 
-    @Column(name = "comfort_type")
-    @Enumerated(EnumType.STRING)
-    private ComfortTypes comfortType;
+    @ManyToOne
+    @JoinColumn(name = "comfort_type_id")
+    private ComfortType comfortType;
 
     @Column(name = "seat_type_id")
     private Long seatTypeId;

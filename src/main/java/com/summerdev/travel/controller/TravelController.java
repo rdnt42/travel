@@ -20,9 +20,9 @@ public class TravelController {
     @GetMapping("/v1/travel_map")
     public TravelMapResponse getTravelMap(@RequestParam String departureCity,
                                           @RequestParam Long maxCost,
-                                          @RequestParam String comfortType,
+                                          @RequestParam Integer comfortTypeId,
                                           @RequestParam Long days) {
-        return travelMapService.getTravelMap(departureCity, maxCost, comfortType, days);
+        return travelMapService.getTravelMap(departureCity, maxCost, comfortTypeId, days);
     }
 
 }

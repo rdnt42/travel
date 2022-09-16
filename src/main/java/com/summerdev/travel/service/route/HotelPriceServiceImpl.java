@@ -1,7 +1,7 @@
 package com.summerdev.travel.service.route;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.enums.ComfortTypes;
+import com.summerdev.travel.entity.directory.ComfortType;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 import com.summerdev.travel.repository.HotelPriceRepository;
 import com.summerdev.travel.service.budget.BudgetService;
@@ -30,7 +30,7 @@ public class HotelPriceServiceImpl implements HotelPriceService {
     @NonNull BudgetService budgetService;
 
     @Override
-    public List<HotelPrice> getHotelsPricesForTrip(List<GeoNameData> cities, Long totalBudget, ComfortTypes comfortType) {
+    public List<HotelPrice> getHotelsPricesForTrip(List<GeoNameData> cities, Long totalBudget, ComfortType comfortType) {
         Double budgetForTrain = budgetService.getBudgetForTrip(totalBudget);
 
         return hotelPriceRepository.findAllByHotelInfoCityInAndCostLessThanAndComfortType(

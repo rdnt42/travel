@@ -1,7 +1,7 @@
 package com.summerdev.travel.service.route;
 
 import com.summerdev.travel.entity.GeoNameData;
-import com.summerdev.travel.enums.ComfortTypes;
+import com.summerdev.travel.entity.directory.ComfortType;
 import com.summerdev.travel.entity.train.TrainPrice;
 import com.summerdev.travel.repository.TrainPriceRepository;
 import com.summerdev.travel.service.budget.BudgetService;
@@ -30,7 +30,7 @@ public class TrainPriceServiceImpl implements TrainPriceService {
     @NonNull BudgetService trainBudgetService;
 
     @Override
-    public List<TrainPrice> getTrainPricesForTrip(Long totalBudget, ComfortTypes comfortType, GeoNameData departureCity) {
+    public List<TrainPrice> getTrainPricesForTrip(Long totalBudget, ComfortType comfortType, GeoNameData departureCity) {
         Double budgetForTrain = trainBudgetService.getBudgetForTrip(totalBudget);
 
         return trainPriceRepository.findAllByTrainInfoDepartureCityAndCostLessThanAndComfortType(
