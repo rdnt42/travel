@@ -13,7 +13,8 @@ import java.io.Serializable;
  * Time: 20:24
  */
 @Getter
-@Entity(name = "hotel_prices")
+@Table(name = "hotel_prices")
+@Entity
 public class HotelPrice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

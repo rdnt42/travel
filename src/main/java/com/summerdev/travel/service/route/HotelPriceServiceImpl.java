@@ -33,7 +33,6 @@ public class HotelPriceServiceImpl implements HotelPriceService {
     public List<HotelPrice> getHotelsPricesForTrip(List<GeoNameData> cities, Long totalBudget, ComfortType comfortType) {
         Double budgetForTrain = budgetService.getBudgetForTrip(totalBudget);
 
-        return hotelPriceRepository.findAllByHotelInfoCityInAndCostLessThanAndComfortType(
-                cities, budgetForTrain, comfortType);
+        return hotelPriceRepository.findAllCheapPrices(cities, comfortType, budgetForTrain);
     }
 }

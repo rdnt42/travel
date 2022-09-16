@@ -33,8 +33,7 @@ public class TrainPriceServiceImpl implements TrainPriceService {
     public List<TrainPrice> getTrainPricesForTrip(Long totalBudget, ComfortType comfortType, GeoNameData departureCity) {
         Double budgetForTrain = trainBudgetService.getBudgetForTrip(totalBudget);
 
-        return trainPriceRepository.findAllByTrainInfoDepartureCityAndCostLessThanAndComfortType(
-                departureCity, budgetForTrain, comfortType);
+        return trainPriceRepository.findAllCheapPrices(departureCity, comfortType, budgetForTrain);
     }
 
     @Override
