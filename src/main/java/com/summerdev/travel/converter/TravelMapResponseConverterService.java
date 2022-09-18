@@ -1,10 +1,12 @@
-package com.summerdev.travel.adapter;
+package com.summerdev.travel.converter;
 
 import com.summerdev.travel.entity.GeoNameData;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 import com.summerdev.travel.entity.train.TrainPrice;
 import com.summerdev.travel.response.RouteResponse;
+import com.summerdev.travel.response.TransportPriceResponse;
 import com.summerdev.travel.response.TravelMapResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -17,10 +19,13 @@ import java.util.stream.Collectors;
  * Date: 02.03.2022
  * Time: 20:23
  */
+@RequiredArgsConstructor
 @Service
-public class TravelMapResponseAdapterService {
+public class TravelMapResponseConverterService {
     // TODO fix this dirty hack
     private static final int ROUTE_LIMITS = 4;
+
+    private final TransportPriceResponseConverterService transportPriceResponseConverterService;
 
     public TravelMapResponse getResponseFromPrices(List<TrainPrice> pricesPerRoute, List<HotelPrice> pricesPerCity, List<GeoNameData> arrivalCities) {
         TravelMapResponse result = new TravelMapResponse();
@@ -44,11 +49,10 @@ public class TravelMapResponseAdapterService {
         HotelPrice lowerHotelPrice = getLowerHotelPrice(hotelPrices);
         hotelPrices.remove(lowerHotelPrice);
 
+        TransportPriceResponse transportResponse = transportPriceResponseConverterService.convert(lowerTrainPrice);
+
         return RouteResponse.builder()
-                .hotelPrices(hotelPrices)
-                .housingPrice(lowerHotelPrice)
-                .trainPrices(trainPrices)
-                .transportPrice(lowerTrainPrice)
+                .transportPrice(transportResponse)
                 .build();
     }
 

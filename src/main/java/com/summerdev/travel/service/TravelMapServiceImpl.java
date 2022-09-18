@@ -1,6 +1,6 @@
 package com.summerdev.travel.service;
 
-import com.summerdev.travel.adapter.TravelMapResponseAdapterService;
+import com.summerdev.travel.converter.TravelMapResponseConverterService;
 import com.summerdev.travel.entity.GeoNameData;
 import com.summerdev.travel.entity.directory.ComfortType;
 import com.summerdev.travel.entity.hotel.HotelPrice;
@@ -23,7 +23,7 @@ public class TravelMapServiceImpl implements TravelMapService {
     private final GeoNameRepository geoNameRepository;
     private final TrainPriceService trainPriceService;
     private final HotelPriceService hotelPriceService;
-    private final TravelMapResponseAdapterService travelMapResponseAdapterService;
+    private final TravelMapResponseConverterService travelMapResponseConverterService;
     private final ComfortTypeRepository comfortTypeRepository;
 
     @Override
@@ -40,6 +40,6 @@ public class TravelMapServiceImpl implements TravelMapService {
         List<GeoNameData> arrivalCities = trainPriceService.getArrivalCities(trainPrices);
         List<HotelPrice> hotelPrices = hotelPriceService.getHotelsPricesForTrip(arrivalCities, maxCost, comfortType);
 
-        return travelMapResponseAdapterService.getResponseFromPrices(trainPrices, hotelPrices, arrivalCities);
+        return travelMapResponseConverterService.getResponseFromPrices(trainPrices, hotelPrices, arrivalCities);
     }
 }
