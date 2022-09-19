@@ -15,7 +15,7 @@ public class TransportPriceResponse {
     private String cost;
     private String comfortTypeName;
     private String seatTypeName;
-    private String travelTimeMinutes;
+    private String travelTime;
     private String arrivalCity;
     private String departureCity;
 }
