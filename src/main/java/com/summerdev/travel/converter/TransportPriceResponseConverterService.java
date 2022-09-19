@@ -23,12 +23,15 @@ public class TransportPriceResponseConverterService {
                 .departureCity(price.getTrainInfo().getDepartureCity().getGeoNameRu())
                 .comfortTypeName(price.getComfortType().getComfortTypeName())
                 .seatTypeName(price.getSeatType().getSeatTypeName())
-                .travelTimeMinutes(travelTime)
+                .travelTime(travelTime)
                 .build();
     }
 
     private String convertTravelTime(long seconds) {
-        return String.format("%.2f", seconds / 60.0);
+        String hours = String.valueOf(seconds / 60 / 60);
+        String minutes = String.valueOf(seconds / 60 % 60);
+
+        return String.format("%s ч %s м", hours, minutes);
     }
 
     private String convertCost(double cost) {
