@@ -1,8 +1,8 @@
 package com.summerdev.travel.converter;
 
-import com.summerdev.travel.entity.GeoNameData;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 import com.summerdev.travel.entity.train.TrainPrice;
+import com.summerdev.travel.response.HousingPriceResponse;
 import com.summerdev.travel.response.RouteResponse;
 import com.summerdev.travel.response.TransportPriceResponse;
 import com.summerdev.travel.response.TravelMapResponse;
@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -22,69 +24,70 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class TravelMapResponseConverterService {
-    // TODO fix this dirty hack
-    private static final int ROUTE_LIMITS = 4;
-
     private final TransportPriceResponseConverterService transportPriceResponseConverterService;
+    private final HousingPriceResponseConverterService housingPriceResponseConverterService;
 
-    public TravelMapResponse getResponseFromPrices(List<TrainPrice> pricesPerRoute, List<HotelPrice> pricesPerCity, List<GeoNameData> arrivalCities) {
+    public TravelMapResponse getResponseFromPrices(List<TrainPrice> trainPrices, List<HotelPrice> hotelPrices, String departureCity) {
         TravelMapResponse result = new TravelMapResponse();
 
-        for (GeoNameData arrivalCity : arrivalCities) {
-            List<TrainPrice> preparedTrainPrices = getPreparedTrainPrices(pricesPerRoute, arrivalCity);
-            List<HotelPrice> filteredHotelPrices = getPreparedHotelPrices(pricesPerCity, arrivalCity);
+        Map<String, List<TrainPrice>> trainPricesMap = trainPrices.stream()
+                .collect(Collectors.groupingBy(t -> t.getTrainInfo().getArrivalCity().getGeoNameRu()));
+        Map<String, List<HotelPrice>> hotelPricesMap = hotelPrices.stream()
+                .collect(Collectors.groupingBy(t -> t.getHotelInfo().getCity().getGeoNameRu()));
+        Set<String> arrivalCities = trainPricesMap.keySet();
 
-            RouteResponse routeResponse = getRouteResponse(preparedTrainPrices, filteredHotelPrices);
+        // TODO fix constant
+        updateConstantLimits(hotelPricesMap);
+        updateConstantLimits(trainPricesMap);
+
+        for (String arrivalCity : arrivalCities) {
+            List<TrainPrice> preparedTrainPrices = trainPricesMap.get(arrivalCity);
+            List<HotelPrice> filteredHotelPrices = hotelPricesMap.get(arrivalCity);
+
+            RouteResponse routeResponse = getRouteResponse(preparedTrainPrices, filteredHotelPrices, arrivalCity, departureCity);
 
             result.addItem(routeResponse);
         }
 
-        return getFilteredResponse(result);
+        return result;
     }
 
-    private RouteResponse getRouteResponse(List<TrainPrice> trainPrices, List<HotelPrice> hotelPrices) {
+    private <T> void updateConstantLimits(Map<String, List<T>> map) {
+        for (Map.Entry<String, List<T>> entry : map.entrySet()) {
+            List<T> limitedList = entry.getValue().stream()
+                    .limit(10)
+                    .collect(Collectors.toList());
+            entry.setValue(limitedList);
+        }
+    }
+
+    private RouteResponse getRouteResponse(List<TrainPrice> trainPrices, List<HotelPrice> hotelPrices, String arrivalCity, String departureCity) {
         TrainPrice lowerTrainPrice = getLowerTrainPrice(trainPrices);
         trainPrices.remove(lowerTrainPrice);
 
         HotelPrice lowerHotelPrice = getLowerHotelPrice(hotelPrices);
         hotelPrices.remove(lowerHotelPrice);
 
-        TransportPriceResponse transportResponse = transportPriceResponseConverterService.convert(lowerTrainPrice);
+        TransportPriceResponse transport = transportPriceResponseConverterService.convert(lowerTrainPrice);
+        HousingPriceResponse hotel = housingPriceResponseConverterService.convert(lowerHotelPrice);
+
+        List<TransportPriceResponse> alternativeTransport = transportPriceResponseConverterService.convert(trainPrices);
+        List<HousingPriceResponse> alternativeHotels = housingPriceResponseConverterService.convert(hotelPrices);
 
         return RouteResponse.builder()
-                .transportPrice(transportResponse)
+                .arrivalCity(arrivalCity)
+                .departureCity(departureCity)
+                .transportPrice(transport)
+                .housingPrice(hotel)
+                .alternativeTransportPrice(alternativeTransport)
+                .alternativeHousingPrice(alternativeHotels)
                 .build();
-    }
-
-    private TravelMapResponse getFilteredResponse(TravelMapResponse travelMapResponse) {
-        List<RouteResponse> filteredResponses = travelMapResponse.getRouteResponses().stream()
-                .limit(ROUTE_LIMITS)
-                .toList();
-        travelMapResponse.setRouteResponses(filteredResponses);
-
-        return travelMapResponse;
-    }
-
-    private List<HotelPrice> getPreparedHotelPrices(List<HotelPrice> hotelPrices, GeoNameData city) {
-        return hotelPrices.stream()
-                .filter(hotelPrice -> hotelPrice.getHotelInfo().getCity().getId().equals(city.getId()))
-                .sorted(Comparator.comparingDouble(HotelPrice::getCost))
-                .limit(ROUTE_LIMITS)
-                .collect(Collectors.toList());
     }
 
     private HotelPrice getLowerHotelPrice(List<HotelPrice> hotelPrices) {
         return hotelPrices.stream()
                 .min(Comparator.comparingDouble(HotelPrice::getCost))
                 .orElse(null);
-    }
-
-    private List<TrainPrice> getPreparedTrainPrices(List<TrainPrice> trainPrices, GeoNameData city) {
-        return trainPrices.stream()
-                .filter(trainPrice -> trainPrice.getTrainInfo().getArrivalCity().getId().equals(city.getId()))
-                .sorted(Comparator.comparingDouble(TrainPrice::getCost))
-                .limit(ROUTE_LIMITS)
-                .collect(Collectors.toList());
     }
 
     private TrainPrice getLowerTrainPrice(List<TrainPrice> trainPrices) {

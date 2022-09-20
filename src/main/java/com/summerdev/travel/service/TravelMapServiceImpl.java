@@ -40,6 +40,6 @@ public class TravelMapServiceImpl implements TravelMapService {
         List<GeoNameData> arrivalCities = trainPriceService.getArrivalCities(trainPrices);
         List<HotelPrice> hotelPrices = hotelPriceService.getHotelsPricesForTrip(arrivalCities, maxCost, comfortType);
 
-        return travelMapResponseConverterService.getResponseFromPrices(trainPrices, hotelPrices, arrivalCities);
+        return travelMapResponseConverterService.getResponseFromPrices(trainPrices, hotelPrices, departureCityName);
     }
 }

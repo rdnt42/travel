@@ -5,6 +5,7 @@ import com.summerdev.travel.entity.directory.ComfortType;
 import com.summerdev.travel.entity.hotel.HotelPrice;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,4 +15,7 @@ import java.util.List;
  */
 public interface HotelPriceService {
     List<HotelPrice> getHotelsPricesForTrip(List<GeoNameData> cities, Long totalBudget, ComfortType comfortType);
+
+    List<HotelPrice> getHotelsPricesForTrip(Set<String> cities, Long totalBudget, ComfortType comfortType);
+
 }

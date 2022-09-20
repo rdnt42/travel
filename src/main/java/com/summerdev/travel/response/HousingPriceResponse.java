@@ -6,13 +6,13 @@ import lombok.Getter;
 /**
  * Created with IntelliJ IDEA.
  * User: marowak
- * Date: 18.09.2022
- * Time: 15:10
+ * Date: 20.09.2022
+ * Time: 22:55
  */
 @Getter
 @Builder
-public class TransportPriceResponse {
+public class HousingPriceResponse {
+    private final String hotelName;
+    private final Long stars;
     private final String cost;
-    private final String seatTypeName;
-    private final String travelTime;
 }

@@ -4,6 +4,9 @@ import com.summerdev.travel.entity.train.TrainPrice;
 import com.summerdev.travel.response.TransportPriceResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: marowak
@@ -19,12 +22,18 @@ public class TransportPriceResponseConverterService {
         return TransportPriceResponse
                 .builder()
                 .cost(cost)
-                .arrivalCity(price.getTrainInfo().getArrivalCity().getGeoNameRu())
-                .departureCity(price.getTrainInfo().getDepartureCity().getGeoNameRu())
-                .comfortTypeName(price.getComfortType().getComfortTypeName())
                 .seatTypeName(price.getSeatType().getSeatTypeName())
                 .travelTime(travelTime)
                 .build();
+    }
+
+    public List<TransportPriceResponse> convert(List<TrainPrice> prices) {
+        List<TransportPriceResponse> responses = new ArrayList<>();
+        for (TrainPrice price : prices) {
+            responses.add(convert(price));
+        }
+
+        return responses;
     }
 
     private String convertTravelTime(long seconds) {

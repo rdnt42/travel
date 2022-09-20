@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,6 +32,13 @@ public class HotelPriceServiceImpl implements HotelPriceService {
 
     @Override
     public List<HotelPrice> getHotelsPricesForTrip(List<GeoNameData> cities, Long totalBudget, ComfortType comfortType) {
+        Double budgetForTrain = budgetService.getBudgetForTrip(totalBudget);
+
+        return hotelPriceRepository.findAllCheapPrices(cities, comfortType, budgetForTrain);
+    }
+
+    @Override
+    public List<HotelPrice> getHotelsPricesForTrip(Set<String> cities, Long totalBudget, ComfortType comfortType) {
         Double budgetForTrain = budgetService.getBudgetForTrip(totalBudget);
 
         return hotelPriceRepository.findAllCheapPrices(cities, comfortType, budgetForTrain);
